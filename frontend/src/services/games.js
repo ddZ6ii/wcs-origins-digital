@@ -7,6 +7,13 @@ export const getGames = (controller) => {
   return axios.get(`${BASE_URL}/games`, { signal });
 };
 
+export const getByName = (gameName) => {
+  const controller = new AbortController();
+  return axios.get(`${BASE_URL}/games?name=${gameName}`, {
+    signal: controller.signal,
+  });
+};
+
 export const modifyGameById = (body, id) =>
   axios.put(`${BASE_URL}/games/${id}`, body, {
     withCredentials: true,
