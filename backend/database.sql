@@ -24,19 +24,19 @@ CREATE TABLE `video` (
     `thumbnail` VARCHAR(255) NOT NULL,
     `url_video` VARCHAR(255) NOT NULL,
     `is_promoted` TINYINT UNSIGNED DEFAULT 0,
-    -- 'visibility' controls which user (not connected, connected with plan...) can access the videos
+    -- 'visibility' controls which user can access the videos
     -- 0: all users
     -- 1: connected w OR w/o plan (freemium)
     -- 2: connected with plan (premium)
     `visibility` TINYINT UNSIGNED DEFAULT 0,
-    `game_id` INT DEFAULT NULL,
+    `game_id` INT NOT NULL,
     CONSTRAINT fk_video_game FOREIGN KEY (`game_id`)
         REFERENCES `game` (`id`)
-         ON DELETE SET NULL,
-    `language_id` INT DEFAULT NULL,
+         ON DELETE CASCADE,
+    `language_id` INT NOT NULL,
     CONSTRAINT fk_video_language FOREIGN KEY (`language_id`)
         REFERENCES `language` (`id`)
-         ON DELETE SET NULL
+         ON DELETE CASCADE
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
 DROP TABLE IF EXISTS `category`;
