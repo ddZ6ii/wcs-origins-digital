@@ -1,16 +1,13 @@
-// Packages
-import PropTypes from "prop-types";
-import { Modal } from "antd";
 import { useRef, useState } from "react";
+import { Modal } from "antd";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-// Components
 import Button from "../../common/Button";
+import Dropdown from "../../common/Dropdown";
 import Input from "../../common/Input";
 import Label from "../../common/Label";
-import Dropdown from "../../common/Dropdown";
 
-// Hooks
 import useAxios from "../../../hooks/useAxios";
 
 // Helpers
@@ -23,18 +20,10 @@ import {
 import formatVideoBodyRequest from "../../../utils/formatVideoBodyRequest";
 import checkVideoFormCompleted from "../../../utils/checkVideoFormCompleted";
 
-// Services
-import {
-  addVideoThumbnail,
-  addVideoMedia,
-  addVideo,
-  addVideoCategory,
-} from "../../../services/videos";
+import * as Videos from "../../../services/videos";
 
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
-// Styles
 import styles from "../Table.module.css";
 
 export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
@@ -133,15 +122,15 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
         // upload video thumbnail to backend public folder
         const {
           data: { url_file: videoThumbUrl },
-        } = await addVideoThumbnail(thumbnailFormData);
+        } = await Videos.addThumbnail(thumbnailFormData);
 
         // upload video to backend public folder
         const {
           data: { url_file: videoUrl },
-        } = await addVideoMedia(videoFormData);
+        } = await Videos.addMedia(videoFormData);
 
         // add video entry to database
-        const responseVideo = await addVideo(
+        const responseVideo = await Videos.add(
           formatVideoBodyRequest(formVideoInfo, videoUrl, videoThumbUrl)
         );
 
@@ -150,7 +139,7 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
 
         formVideoInfo.category.forEach(async (category) => {
           try {
-            const response = await addVideoCategory({
+            const response = await Videos.addVideoCategory({
               video_id: responseVideo.data.insertId,
               category_id: category.id,
             });
