@@ -14,9 +14,6 @@ import { filterByText } from "../../../utils/filterTable";
 // Hook
 import useAxios from "../../../hooks/useAxios";
 
-// Services
-import { getUsers } from "../../../services/users";
-
 // Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 import paginationSettings from "../../../settings/pagination.json";
@@ -25,11 +22,10 @@ export default function UserTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
-  const [userList, setUserList] = useState([]);
   const [filterText, setFilterText] = useState("");
   const [flagUsers, setFlagUsers] = useState(false);
 
-  const { data: users, isLoading } = useAxios("/users");
+  const { data: users, isLoading } = useAxios("/users", flagUsers);
 
   // Pagination logic
   const offset = pageSize * currentPage - pageSize;
@@ -57,14 +53,6 @@ export default function UserTable() {
     toast.success("User list successfully exported!", TOAST_DEFAULT_CONFIG);
   };
 
-  // load users from database
-  useEffect(() => {
-    const userController = new AbortController();
-    getUsers(userController)
-      .then((res) => setUserList(res.data))
-      .catch((err) => console.error(err));
-  }, [flagUsers]);
-
   useEffect(() => {
     setCurrentPage(1);
   }, []);
@@ -89,7 +77,8 @@ export default function UserTable() {
             <table className="w-full text-left text-base text-neutralLightest">
               <RowHead activeTab="userList" />
               <tbody>
-                {filterByText(userList, "pseudo", filterText)
+                {/* {filterByText(userList, "pseudo", filterText) */}
+                {filterByText(users, "pseudo", filterText)
                   .slice(offset, nextPage)
                   .map((user) => (
                     <RowUser
