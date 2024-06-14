@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
@@ -8,6 +7,19 @@ import useAuth from "../../hooks/useAuth";
 
 import styles from "./Slider.module.css";
 
+// algo details:
+// 1) case admin (full access)
+// 2) case user...
+//  2.a) not connected (only access to video with visibility 0)
+//  2.b) connected freemium (access to video with visibility 0 and 1 and favorites)
+//  2.c) connected premium (access to video with visibility 0, 1 and 2 and favorites)
+
+// plan info
+// not connected -> id_plan = null, role = null
+// connected as admin -> id_plan = null, role = 1
+// connected as freemium -> id_plan = [1, 2], role = 0
+// connected as premium -> id_plan = 3, role = 0
+
 export default function SliderVideo({
   videos,
   customClassSlider,
@@ -16,106 +28,79 @@ export default function SliderVideo({
   videoNumber,
   isPaginated,
 }) {
-  const [checkedUserInfo, setCheckedUserInfo] = useState(null);
-
   const navigate = useNavigate();
-  const { account, isLoggedIn: isUserAuthenticated } = useAuth();
+  const { isLoggedIn, isAdmin, isPremium } = useAuth();
 
   const videosToDisplay = isPaginated ? videos.slice(0, videoNumber) : videos;
 
-  const hasUserAcess = (video) => {
-    // 1) case admin (full access)
-    // 2) case user...
-    //  2.a) not connected (only access to video with visibility 0 and 1)
-    //  2.b) connected freemium (access to video with visibility 0 and 1 and favorites)
-    //  2.c) connected premium (access to video with visibility 0, 1 and 2 and favorites)
+  const hasFullAccess = isLoggedIn && (isAdmin || isPremium);
 
-    let hasUserAccess = false;
-
-    switch (account.id_plan) {
-      case 1:
-      case 3:
-        hasUserAccess = account.id_plan >= video.visibility;
-        break;
-      case 2:
-        hasUserAccess = account.id_plan > video.visibility;
-        break;
-      // admin or new user
-      case null:
-        if (account.role) hasUserAccess = true;
-        else hasUserAccess = video.visibility === 0 || video.visibility === 1;
-        break;
-      // not connected
-      default:
-        hasUserAccess = video.visibility === 0;
-        break;
-    }
-    return hasUserAccess;
+  const isFreeContent = (videoVisibility) => videoVisibility === 0;
+  const isPremiumContent = (videoVisibility) => videoVisibility === 2;
+  const hasAccess = (videoVisibility) => {
+    if (hasFullAccess) return true;
+    if (isFreeContent(videoVisibility)) return true;
+    if (isLoggedIn && !isPremium && !isPremiumContent(videoVisibility))
+      return true;
+    return false;
   };
+  const requireLogin = (videoVisibility) =>
+    !isLoggedIn && videoVisibility !== 0;
+  const requirePremium = (videoVisibility) =>
+    isLoggedIn && !isPremium && !isAdmin && videoVisibility === 2;
 
-  const handleVisibility = (video) => {
-    if (!isUserAuthenticated && !hasUserAcess(video))
-      return navigate("/account");
-    if (isUserAuthenticated && !hasUserAcess(video)) return navigate("/plans");
+  const handleShowVideo = (video) => {
+    if (requireLogin(video.visibility)) return navigate("/account");
+
+    if (requirePremium(video.visibility)) return navigate("/plans");
     return navigate(`/videos/${video.id}`);
   };
 
-  useEffect(() => {
-    if (account.id_plan !== "unknown") setCheckedUserInfo(true);
-    else setCheckedUserInfo(false);
-  }, [account]);
-
   return (
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    <>
-      {!checkedUserInfo ? (
-        <p>Loading data...</p>
-      ) : (
-        <ul className={`${styles.slider} ${customClassSlider}`}>
-          {videosToDisplay.map((video) => (
-            <li key={video.id}>
-              <button
-                type="button"
-                className="w-full"
-                onClick={() => handleVisibility(video)}
-              >
-                <Card
-                  classCSS={`${styles.card} ${customClassCard} bg-cover`}
-                  styleCSS={{
-                    backgroundImage: `url(${video.thumbnail})`,
-                  }}
-                >
-                  {!hasUserAcess(video) ? (
-                    <div className={styles.card__overlay}>
-                      <div
-                        className={`${styles.overlay__wrapper} ${customClassOverlayWrapper}`}
-                      >
-                        <img
-                          src="./src/assets/icon/utility/lock.svg"
-                          alt={video.title}
-                          className={styles.overlay__wrapper__lock}
-                        />
-                        {!isUserAuthenticated ? (
-                          <p className={styles.overlay__wrapper__description}>
-                            Login to watch
-                          </p>
-                        ) : null}
-                        {isUserAuthenticated && !hasUserAcess(video) ? (
-                          <p className={styles.overlay__wrapper__description}>
-                            Become premium to watch
-                          </p>
-                        ) : null}
-                      </div>
-                    </div>
-                  ) : null}
-                </Card>
-                <p className={styles.slider__video__title}>{video.title}</p>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
+    <ul className={`${styles.slider} ${customClassSlider}`}>
+      {videosToDisplay.map((video) => (
+        <li key={video.id}>
+          <button
+            type="button"
+            className="w-full"
+            onClick={() => handleShowVideo(video)}
+          >
+            <Card
+              classCSS={`${styles.card} ${customClassCard} bg-cover`}
+              styleCSS={{
+                backgroundImage: `url(${video.thumbnail})`,
+              }}
+            >
+              {!hasAccess(video.visibility) ? (
+                <div className={styles.card__overlay}>
+                  <div
+                    className={`${styles.overlay__wrapper} ${customClassOverlayWrapper}`}
+                  >
+                    <img
+                      src="./src/assets/icon/utility/lock.svg"
+                      alt={video.title}
+                      className={styles.overlay__wrapper__lock}
+                    />
+                    {requireLogin(video.visibility) ? (
+                      <p className={styles.overlay__wrapper__description}>
+                        Login to watch
+                      </p>
+                    ) : null}
+
+                    {requirePremium(video.visibility) ? (
+                      <p className={styles.overlay__wrapper__description}>
+                        Become premium to watch
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
+            </Card>
+            <p className={styles.slider__video__title}>{video.title}</p>
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 }
 
