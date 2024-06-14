@@ -34,9 +34,8 @@ const getAllWithFilters = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const [[video]] = await models.video.findById(req.params.id);
-    if (!video) res.status(404).send("Video not found");
-    res.json(video);
+    const [videos] = await models.video.findById(req.params.id);
+    res.json(videos);
   } catch (err) {
     console.error(err);
     res
@@ -82,7 +81,7 @@ const getAllByLanguage = async (req, res) => {
     res
       .status(500)
       .send(
-        "oops...an error occured when retrieving video related to language from database"
+        "oops...an error occured when retrieving videos related to language from database"
       );
   }
 };
@@ -96,7 +95,21 @@ const getAllByGame = async (req, res) => {
     res
       .status(500)
       .send(
-        "oops...an error occured when retrieving video related to game from database"
+        "oops...an error occured when retrieving videos related to game from database"
+      );
+  }
+};
+
+const getAllByCategory = async (req, res) => {
+  try {
+    const [categories] = await models.video.findAllByCategory(req.params.id);
+    res.json(categories);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .send(
+        "oops...an error occured when retrieving videos related to category from database"
       );
   }
 };
@@ -150,6 +163,7 @@ module.exports = {
   getAllPremium,
   getAllByLanguage,
   getAllByGame,
+  getAllByCategory,
   editById,
   post,
   remove,

@@ -12,9 +12,7 @@ const {
 
 const router = express.Router();
 
-// router.get("/", userController.getAll);
 router.get("/stats/:id", userController.getAllStats);
-// router.get("/:id", userController.getById);
 
 router.post(
   "/",

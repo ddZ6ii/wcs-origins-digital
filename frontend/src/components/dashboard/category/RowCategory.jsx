@@ -3,21 +3,31 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 
 import Button from "../../common/Button";
+import ConfirmModal from "../../common/ConfirmModal";
 import CatDropdown from "./CatDropdown";
 
 import * as Categories from "../../../services/categories";
+import * as Videos from "../../../services/videos";
 import capitalizeText from "../../../utils/capitalize";
 
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 export default function RowCategory({ category, refetchData }) {
   const [isToggled, setIsToggled] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [count, setCount] = useState(null);
 
   const toggleDropdown = () => setIsToggled(!isToggled);
 
-  const handleDeleteCategory = async (id) => {
+  const hasRelatedContent = async (categoryId) => {
+    const videoCount = await Videos.getCountByCategory(categoryId);
+    setCount(videoCount);
+    return Boolean(videoCount);
+  };
+
+  const deleteCategory = async (categoryId) => {
     try {
-      const response = await Categories.remove(id);
+      const response = await Categories.remove(categoryId);
       if (response?.status === 204) {
         toast.success("Category successfully deleted!", TOAST_DEFAULT_CONFIG);
         refetchData((prev) => !prev);
@@ -29,6 +39,51 @@ export default function RowCategory({ category, refetchData }) {
         response.status === 404 ? response.data : response.statusText;
       toast.error(notification, TOAST_DEFAULT_CONFIG);
     }
+  };
+
+  const deleteRelatedVideos = async (videos) => {
+    try {
+      videos.forEach(async (video) => {
+        const hasMultipleCategories = await Videos.getCount(video.id);
+        // do not delete video if related to multiple categories
+        if (hasMultipleCategories) return;
+
+        // first delete video files from public folder...
+        await Videos.deleteThumbnail({
+          data: { thumbnail: video.thumbnail },
+        });
+        await Videos.deleteMedia({
+          data: { url_video: video.url_video },
+        });
+        // ... then delete entry from database
+        await Videos.remove(video.id);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleCancel = () => setShowModal(false);
+
+  const handleConfirm = async () => {
+    // retrieve related videos (prior deleting entries in mapping table due to ON CASCADE DELETE when deleting a category)
+    const { data: videos } = await Videos.getAllByCategory(category.id);
+    // delete category
+    await deleteCategory(category.id);
+    // delete related videos
+    await deleteRelatedVideos(videos);
+    setShowModal(false);
+  };
+
+  const handleDeleteCategory = async (id) => {
+    try {
+      const needConfirmation = await hasRelatedContent(id);
+      if (needConfirmation) return setShowModal(true);
+      await deleteCategory(id);
+    } catch (err) {
+      console.error(err);
+    }
+    return null;
   };
 
   return (
@@ -79,6 +134,7 @@ export default function RowCategory({ category, refetchData }) {
           </span>
         </td>
       </tr>
+
       {isToggled && (
         <CatDropdown
           category={category}
@@ -86,6 +142,23 @@ export default function RowCategory({ category, refetchData }) {
           refetchData={refetchData}
         />
       )}
+
+      <ConfirmModal
+        open={showModal}
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+      >
+        {count && (
+          <p className="text-sm">
+            <span className="font-bold text-primaryLight">{count} </span>
+            videos are related to "
+            <span className="font-bold text-primaryLight">
+              {capitalizeText(category.name)}
+            </span>
+            " and will also be removed...
+          </p>
+        )}
+      </ConfirmModal>
     </>
   );
 }

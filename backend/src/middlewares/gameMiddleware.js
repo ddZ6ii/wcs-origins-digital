@@ -7,8 +7,6 @@ const checkForExistingGame = async (req, res, next) => {
 
     const [games] = await models.game.findAll();
 
-    if (!games.length) return res.status(404).send("No games found");
-
     const match = games.find(
       (game) => game.name.toLowerCase() === req.body.name.toLowerCase()
     );

@@ -17,6 +17,7 @@ router.use(verifyToken);
 
 router.get("/languages/:id", hasAdminRole, videoController.getAllByLanguage);
 router.get("/games/:id", hasAdminRole, videoController.getAllByGame);
+router.get("/categories/:id", hasAdminRole, videoController.getAllByCategory);
 router.put("/:id", hasAdminRole, validateVideoInfo, videoController.editById);
 router.delete("/:id", hasAdminRole, videoController.remove);
 router.post("/", hasAdminRole, validateVideoInfo, videoController.post);

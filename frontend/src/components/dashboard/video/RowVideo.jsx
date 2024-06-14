@@ -7,7 +7,6 @@ import VideoDropdown from "./VideoDropdown";
 
 import useAxios from "../../../hooks/useAxios";
 
-// Services
 import * as Videos from "../../../services/videos";
 
 import capitalizeText from "../../../utils/capitalize";
