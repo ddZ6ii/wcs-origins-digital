@@ -2,9 +2,10 @@ const models = require("../models");
 const handleVideoQuery = require("../utils/handleVideoQuery");
 const isEmpty = require("../utils/isEmpty");
 
+// hard-coded treshold to consider videos as popular
+const POUPLAR_VIDEO_TRESHOLD = 1;
+
 const getAllWithFilters = async (req, res) => {
-  // hard-coded treshold to consider videos as popular
-  const POUPLAR_VIDEO_TRESHOLD = 1;
   try {
     // handle query filters from client request (if any)
     const [sql, sqlDependencies] = handleVideoQuery(

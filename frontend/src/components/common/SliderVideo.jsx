@@ -1,13 +1,11 @@
-// Packages
-import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
-// Components
 import Card from "./Card";
+
 import useAuth from "../../hooks/useAuth";
 
-// Styles
 import styles from "./Slider.module.css";
 
 export default function SliderVideo({
@@ -18,9 +16,10 @@ export default function SliderVideo({
   videoNumber,
   isPaginated,
 }) {
+  const [checkedUserInfo, setCheckedUserInfo] = useState(null);
+
   const navigate = useNavigate();
   const { account, isLoggedIn: isUserAuthenticated } = useAuth();
-  const [checkedUserInfo, setCheckedUserInfo] = useState(null);
 
   const videosToDisplay = isPaginated ? videos.slice(0, videoNumber) : videos;
 

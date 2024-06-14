@@ -10,17 +10,16 @@ import * as Games from "../services/games";
 import isEmpty from "../utils/isEmpty";
 
 export default function Videos() {
-  // retrieve query parameters from URL
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const [filterText, setFilterText] = useState("");
   const [filterGame, setFilterGame] = useState({});
   const [filterCategory, setFilterCategory] = useState([]);
-
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChangeFilterText = (text) => setFilterText(text);
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  const resetCatFilters = () => setFilterCategory([]);
+  const handleChangeFilterText = (text) => setFilterText(text);
+  const handleLoadingVideos = (bool) => setIsLoading(bool);
   const handleChangeCategory = (e) => {
     const { value: name } = e.target;
     const id = Number(e.target.getAttribute("data-key"));
@@ -34,18 +33,12 @@ export default function Videos() {
 
     setFilterCategory(updatedArray);
   };
-
   const handleChangeGame = (e) => {
     const id = Number(e.target.getAttribute("data-key"));
     const { id: name } = e.target;
     setFilterGame({ id, name });
     setSearchParams("");
   };
-
-  const handleLoadingVideos = (bool) => setIsLoading(bool);
-
-  const resetCatFilters = () => setFilterCategory([]);
-
   const resetGameFilters = () => {
     setFilterGame({});
     setSearchParams("");

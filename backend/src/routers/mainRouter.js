@@ -14,8 +14,8 @@ const userVideoRouter = require("./userVideoRouter");
 
 const router = express.Router();
 
-router.use("/admin", adminRouter);
 router.use("/auth", authRouter);
+router.use("/admin", adminRouter);
 router.use("/categories", categoryRouter);
 router.use("/games", gameRouter);
 router.use("/languages", languageRouter);

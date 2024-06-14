@@ -15,8 +15,6 @@ export default function VideoGallery({
   const {
     account: { id_user: userId },
   } = useAuth();
-
-  // fetch video data from database
   const { data: premiumVideos, isLoading: arePremiumVideosLoading } =
     useAxios("/videos/premium");
   const { data: freemiumVideos, isLoading: areFreemiumVideosLoading } =
