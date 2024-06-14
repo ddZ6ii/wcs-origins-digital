@@ -1,28 +1,36 @@
-// Packages
-import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { EffectCoverflow, Pagination, Navigation } from "swiper";
-import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-// Style
+import Card from "../common/Card";
+
+import useAuth from "../../hooks/useAuth";
+import capitalize from "../../utils/capitalize";
+
+import TOAST_DEFAULT_CONFIG from "../../settings/toastify.json";
+
 import "swiper/swiper-bundle.min.css";
 import styles from "../common/Slider.module.css";
 import "react-toastify/dist/ReactToastify.css";
 
-// Components
-import Card from "../common/Card";
-
-// Helpers
-import capitalize from "../../utils/capitalize";
-
-// Settings
-import TOAST_DEFAULT_CONFIG from "../../settings/toastify.json";
-
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
 
 export default function Caroussel({ plans, billing }) {
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
   const handleClick = (name) => {
-    toast.success(`Plan ${name} selected!`, TOAST_DEFAULT_CONFIG);
+    if (isLoggedIn)
+      toast.info(
+        `${name} plan selected! Feature coming soon...`,
+        TOAST_DEFAULT_CONFIG
+      );
+    else {
+      toast.warning(`Please login first`, TOAST_DEFAULT_CONFIG);
+      navigate("/account");
+    }
   };
 
   return (
