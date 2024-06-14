@@ -17,7 +17,7 @@ export const addLanguage = (body) =>
     withCredentials: true,
   });
 
-export const deleteLanguage = (id) =>
-  axios.delete(`${BASE_URL}/languages/${id}`, {
+export const remove = (languageId) =>
+  axios.delete(`${BASE_URL}/languages/${languageId}`, {
     withCredentials: true,
   });

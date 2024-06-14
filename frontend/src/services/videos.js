@@ -4,8 +4,35 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const getVideos = () => {
   const controller = new AbortController();
-  const { signal } = controller;
-  return axios.get(`${BASE_URL}/videos`, { signal });
+  return axios.get(`${BASE_URL}/videos`, { signal: controller.signal });
+};
+
+export const getAllByLanguage = (languageId) => {
+  const controller = new AbortController();
+  return axios.get(
+    `${BASE_URL}/videos/languages/${languageId}`,
+    { withCredentials: true },
+    { signal: controller.signal }
+  );
+};
+
+export const getCountByLanguage = async (languageId) => {
+  const { data: videos } = await getAllByLanguage(languageId);
+  return videos.length;
+};
+
+export const getAllByGame = (gameId) => {
+  const controller = new AbortController();
+  return axios.get(
+    `${BASE_URL}/videos/games/${gameId}`,
+    { withCredentials: true },
+    { signal: controller.signal }
+  );
+};
+
+export const getCountByGame = async (gameId) => {
+  const { data: games } = await getAllByGame(gameId);
+  return games.length;
 };
 
 export const getFavoriteVideos = (userId) => {

@@ -73,6 +73,34 @@ const getAllPremium = async (req, res) => {
   }
 };
 
+const getAllByLanguage = async (req, res) => {
+  try {
+    const [videos] = await models.video.findAllByLanguage(req.params.id);
+    res.json(videos);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .send(
+        "oops...an error occured when retrieving video related to language from database"
+      );
+  }
+};
+
+const getAllByGame = async (req, res) => {
+  try {
+    const [games] = await models.video.findAllByGame(req.params.id);
+    res.json(games);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .send(
+        "oops...an error occured when retrieving video related to game from database"
+      );
+  }
+};
+
 const editById = async (req, res) => {
   try {
     const [result] = await models.video.update(req.body, req.params.id);
@@ -120,6 +148,8 @@ module.exports = {
   getById,
   getAllFreemium,
   getAllPremium,
+  getAllByLanguage,
+  getAllByGame,
   editById,
   post,
   remove,

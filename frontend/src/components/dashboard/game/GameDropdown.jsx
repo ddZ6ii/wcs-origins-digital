@@ -1,23 +1,14 @@
-// Packages
-import PropTypes from "prop-types";
 import { useRef, useEffect } from "react";
+import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 
-// Components
 import Button from "../../common/Button";
 import Input from "../../common/Input";
 
-// Services
-import {
-  addGameThumbnail,
-  modifyGameById,
-  deleteGameThumbnail,
-} from "../../../services/games";
+import * as Games from "../../../services/games";
 
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
-// Style
 import styles from "../Table.module.css";
 
 export default function GameDropdown({ game, toggleDropdown, refetchData }) {
@@ -32,16 +23,16 @@ export default function GameDropdown({ game, toggleDropdown, refetchData }) {
       // a new thumnbail image has been picked
       if (fileRef.current.value) {
         // first delete old file (only if in backend/uploads folder)...
-        await deleteGameThumbnail({
+        await Games.deleteThumbnail({
           data: { thumbnail: game.thumbnail },
         });
         // ...then upload new thumbnail file to backend public folder
         const formData = new FormData();
         formData.append("game_thumbnail", fileRef.current.files[0]);
-        const res = await addGameThumbnail(formData);
+        const res = await Games.addThumbnail(formData);
         thumbnail = res.data.url_file;
       }
-      const res = await modifyGameById(
+      const res = await Games.modifyById(
         { name, thumbnail: thumbnail || game.thumbnail },
         game.id
       );
