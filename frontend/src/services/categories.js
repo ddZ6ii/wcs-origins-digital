@@ -2,22 +2,22 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-export const getCategories = (controller) => {
-  const { signal } = controller;
-  return axios.get(`${BASE_URL}/categories`, { signal });
+export const getAll = () => {
+  const controller = new AbortController();
+  return axios.get(`${BASE_URL}/categories`, { signal: controller.signal });
 };
 
-export const modifyCategoryById = (body, id) =>
-  axios.put(`${BASE_URL}/categories/${id}`, body, {
+export const modifyById = (body, categoryId) =>
+  axios.put(`${BASE_URL}/categories/${categoryId}`, body, {
     withCredentials: true,
   });
 
-export const addCategory = (body) =>
+export const add = (body) =>
   axios.post(`${BASE_URL}/categories/`, body, {
     withCredentials: true,
   });
 
-export const deleteCategory = (id) =>
-  axios.delete(`${BASE_URL}/categories/${id}`, {
+export const remove = (categoryId) =>
+  axios.delete(`${BASE_URL}/categories/${categoryId}`, {
     withCredentials: true,
   });

@@ -1,15 +1,12 @@
-// Package
 import { useState, useEffect } from "react";
 
-// Components
+import Footer from "../components/common/Footer";
 import Hero from "../components/home/Hero";
+import Loader from "../components/common/Loader";
+import Partners from "../components/home/Partners";
 import SliderGame from "../components/home/SliderGame";
 import SliderVideo from "../components/common/SliderVideo";
-import Partners from "../components/home/Partners";
-import Footer from "../components/common/Footer";
-import Loader from "../components/common/Loader";
 
-// Services
 import * as Services from "../services/account";
 
 // Style

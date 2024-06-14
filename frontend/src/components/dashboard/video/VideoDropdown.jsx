@@ -1,15 +1,12 @@
-// Packages
-import PropTypes from "prop-types";
 import { useRef, useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-// Components
 import Button from "../../common/Button";
-import Input from "../../common/Input";
 import Dropdown from "../../common/Dropdown";
+import Input from "../../common/Input";
 import Label from "../../common/Label";
 
-// Helpers
 import {
   updateFromInput,
   updateFromFileInput,
@@ -19,21 +16,10 @@ import {
 import formatVideoBodyRequest from "../../../utils/formatVideoBodyRequest";
 import checkVideoFormCompleted from "../../../utils/checkVideoFormCompleted";
 
-// Services
-import {
-  addVideoThumbnail,
-  addVideoMedia,
-  modifyVideoById,
-  deleteVideoCategory,
-  addVideoCategory,
-  deleteVideoThumbnail,
-  deleteVideoFile,
-} from "../../../services/videos";
+import * as Videos from "../../../services/videos";
 
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
-// Style
 import styles from "../Table.module.css";
 
 export default function VideoDropdown({
@@ -131,7 +117,7 @@ export default function VideoDropdown({
         // a new thumnbail image has been picked
         if (imageRef.current.value) {
           // first delete old file (only if in backend/uploads folder)
-          await deleteVideoThumbnail({
+          await Videos.deleteThumbnail({
             data: { thumbnail: video.thumbnail },
           });
           // ...then upload new thumbnail file to backend public folder
@@ -140,35 +126,35 @@ export default function VideoDropdown({
             "video_thumbnail",
             imageRef.current.files[0]
           );
-          const res = await addVideoThumbnail(thumbnailFormData);
+          const res = await Videos.addThumbnail(thumbnailFormData);
           videoThumbUrl = res.data.url_file;
         }
 
         // a new video file has been picked
         if (videoRef.current.value) {
           // first delete old video file (only if in backend/uploads folder)..
-          await deleteVideoFile({
+          await Videos.deleteMedia({
             data: { url_video: video.url_video },
           });
           // ...then upload new video file to backend public folder
           const videoFormData = new FormData();
           videoFormData.append("video", videoRef.current.files[0]);
-          const res = await addVideoMedia(videoFormData);
+          const res = await Videos.addMedia(videoFormData);
           videoUrl = res.data.url_file;
         }
 
-        await modifyVideoById(
+        await Videos.modifyById(
           formatVideoBodyRequest(formVideoInfo, videoUrl, videoThumbUrl),
           video.id
         );
 
-        await deleteVideoCategory(video.id);
+        await Videos.deleteVideoCategory(video.id);
 
         // add relation entry for each added category (video_category) to database
         const relationReponses = [];
         formVideoInfo.category.forEach(async (category) => {
           try {
-            const response = await addVideoCategory({
+            const response = await Videos.addVideoCategory({
               video_id: video.id,
               category_id: category.id,
             });

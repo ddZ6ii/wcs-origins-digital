@@ -2,17 +2,17 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-export const getLanguages = (controller) => {
-  const { signal } = controller;
-  return axios.get(`${BASE_URL}/languages`, { signal });
+export const getAll = () => {
+  const controller = new AbortController();
+  return axios.get(`${BASE_URL}/languages`, { signal: controller.signal });
 };
 
-export const modifyLanguageById = (body, id) =>
-  axios.put(`${BASE_URL}/languages/${id}`, body, {
+export const modifyById = (body, languageId) =>
+  axios.put(`${BASE_URL}/languages/${languageId}`, body, {
     withCredentials: true,
   });
 
-export const addLanguage = (body) =>
+export const add = (body) =>
   axios.post(`${BASE_URL}/languages/`, body, {
     withCredentials: true,
   });
