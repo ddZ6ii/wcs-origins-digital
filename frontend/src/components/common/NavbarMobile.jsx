@@ -80,8 +80,11 @@ export default function NavbarMobile({ navitems }) {
       </ul>
 
       <div className={`${styles.inline__list} ${styles.navbar__btn}`}>
-        {!isOpen && <MenuOpen onClick={toggleNavMenu} />}
-        {isOpen && <MenuClose onClick={toggleNavMenu} />}
+        {isOpen ? (
+          <MenuClose onClick={toggleNavMenu} />
+        ) : (
+          <MenuOpen onClick={toggleNavMenu} />
+        )}
       </div>
     </nav>
   );
