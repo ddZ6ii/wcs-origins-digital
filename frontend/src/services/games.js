@@ -29,6 +29,7 @@ export const deleteGame = (id) =>
   });
 
 export const deleteGameThumbnail = (data) =>
-  axios.delete(`${BASE_URL}/upload/thumbnails/games`, data, {
+  axios.delete(`${BASE_URL}/upload/thumbnails/games`, {
+    ...data,
     withCredentials: true,
   });
