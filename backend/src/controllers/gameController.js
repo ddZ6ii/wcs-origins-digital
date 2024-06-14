@@ -1,12 +1,14 @@
 const models = require("../models");
 const handleGameQuery = require("../utils/handleGameQuery");
+const isEmpty = require("../utils/isEmpty");
 
 const getAll = async (req, res) => {
   try {
     // handle query filters from client request (if any)
     const [sql, sqlDependencies] = handleGameQuery(req.query);
     const [games] = await models.game.findAllWithFilters(sql, sqlDependencies);
-    if (!games.length)
+
+    if (isEmpty(games) && !isEmpty(sqlDependencies))
       return res
         .status(404)
         .send(
