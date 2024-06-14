@@ -87,11 +87,11 @@ CREATE TABLE `user_video` (
     `user_id` INT DEFAULT NULL,
     CONSTRAINT fk_user_video FOREIGN KEY (`user_id`)
         REFERENCES `user` (`id`)
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     `video_id` INT DEFAULT NULL,
     CONSTRAINT fk_video_user FOREIGN KEY (`video_id`)
         REFERENCES `video` (`id`)
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     `is_favorite` TINYINT UNSIGNED DEFAULT 0
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
@@ -100,11 +100,11 @@ CREATE TABLE `video_category` (
     `video_id` INT DEFAULT NULL,
     CONSTRAINT fk_video_category FOREIGN KEY (`video_id`)
         REFERENCES `video` (`id`)
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     `category_id` INT DEFAULT NULL,
     CONSTRAINT fk_category_video FOREIGN KEY (`category_id`)
         REFERENCES `category` (`id`)
-         ON DELETE SET NULL
+        ON DELETE CASCADE
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
 -- _____________________________________________ POPULATE TABLES _____________________________________________
