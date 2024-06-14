@@ -51,7 +51,7 @@ CREATE TABLE `user_type` (
     -- 'role' controls user privileges
     -- 0: common user
     -- 1: admin
-    `is_admin` TINYINT NOT NULL DEFAULT 0
+    `role` TINYINT UNSIGNED NOT NULL DEFAULT 0
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
 DROP TABLE IF EXISTS `plan`;
@@ -109,7 +109,7 @@ CREATE TABLE `video_category` (
 
 -- _____________________________________________ POPULATE TABLES _____________________________________________
 -- Create user types
-INSERT INTO `user_type` (`is_admin`) 
+INSERT INTO `user_type` (`role`) 
 VALUES
 (0),
 (1);

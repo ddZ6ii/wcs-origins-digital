@@ -7,14 +7,14 @@ class UserManager extends AbstractManager {
 
   findByEmail(email) {
     return this.database.query(
-      `SELECT u.id AS id_user, u.email, u.password, u.pseudo, ut.is_admin, p.id AS id_plan, p.name AS plan FROM ${this.table} AS u INNER JOIN user_type AS ut ON u.user_type_id = ut.id LEFT JOIN plan AS p ON u.plan_id = p.id WHERE email = ?`,
+      `SELECT u.id AS id_user, u.email, u.password, u.pseudo, ut.role, p.id AS id_plan, p.name AS plan FROM ${this.table} AS u INNER JOIN user_type AS ut ON u.user_type_id = ut.id LEFT JOIN plan AS p ON u.plan_id = p.id WHERE email = ?`,
       [email]
     );
   }
 
   findById(userId) {
     return this.database.query(
-      `SELECT u.id AS id_user, u.email, u.password, u.pseudo, ut.is_admin, p.id AS id_plan, p.name AS plan FROM ${this.table} AS u INNER JOIN user_type AS ut ON u.user_type_id = ut.id LEFT JOIN plan AS p ON u.plan_id = p.id WHERE u.id = ?`,
+      `SELECT u.id AS id_user, u.email, u.password, u.pseudo, ut.role, p.id AS id_plan, p.name AS plan FROM ${this.table} AS u INNER JOIN user_type AS ut ON u.user_type_id = ut.id LEFT JOIN plan AS p ON u.plan_id = p.id WHERE u.id = ?`,
       [userId]
     );
   }
