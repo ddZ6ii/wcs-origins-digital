@@ -1,5 +1,6 @@
 const models = require("../models");
 const handleVideoQuery = require("../utils/handleVideoQuery");
+const isEmpty = require("../utils/isEmpty");
 
 const getAllWithFilters = async (req, res) => {
   // hard-coded treshold to consider videos as popular
@@ -16,7 +17,7 @@ const getAllWithFilters = async (req, res) => {
       sqlDependencies
     );
 
-    if (!videos.length)
+    if (isEmpty(videos) && !isEmpty(sqlDependencies))
       return res
         .status(404)
         .send(
