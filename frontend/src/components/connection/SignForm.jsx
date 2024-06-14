@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
+// Components
+import InputPassword from "./InputPassword";
+
 // Custom Hooks
 import useAuth from "../../hooks/useAuth";
 
@@ -12,13 +15,10 @@ import * as User from "../../services/users";
 // Settings
 import TOAST_DEFAULT_CONFIG from "../../settings/toastify.json";
 
-// Assets
-import passHide from "../../assets/icon/utility/eyeSlash.svg";
-import passShow from "../../assets/icon/dashboard/watch.svg";
+const initialCredentials = { email: "", password: "" };
 
 export default function SignForm({ isSignIn }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [credentials, setCredentials] = useState(initialCredentials);
   const [confirmationPassword, setConfirmationPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordConfVisible, setPasswordConfVisible] = useState(false);
@@ -28,27 +28,24 @@ export default function SignForm({ isSignIn }) {
   const passwordType = passwordVisible ? "text" : "password";
   const passwordConfType = passwordConfVisible ? "text" : "password";
 
+  const handleChange = (e) =>
+    setCredentials((c) => ({ ...c, [e.target.name]: e.target.value }));
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (isSignIn) {
         // request sign-in from database
-        const { data: user } = await User.login({
-          email,
-          password,
-        });
+        const { data: user } = await User.login(credentials);
         updateAccount(user);
       }
       if (!isSignIn) {
         // make sure password and confirmation password match
-        if (password !== confirmationPassword) {
+        if (credentials.password !== confirmationPassword) {
           toast.warn(`Passwords do not match!`, TOAST_DEFAULT_CONFIG);
         } else {
           // register new user to database
-          const res = await User.register({
-            email,
-            password,
-          });
+          const res = await User.register(credentials);
 
           if (res?.status === 201) {
             toast.success("Account created. Welcome to Origins e-Sport!", {
@@ -82,60 +79,39 @@ export default function SignForm({ isSignIn }) {
       <h2 className="font-header text-xl uppercase text-neutralDarkest dark:text-neutralLightest">
         {isSignIn ? "Sign In" : "Create Account"}
       </h2>
+
       <input
         type="email"
         placeholder="Email"
         className=" w-full rounded border-none bg-neutralLight p-3 outline-none dark:bg-neutralLightest"
-        id="email-login"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        name="email"
+        value={credentials.email}
+        onChange={handleChange}
         pattern="[A-z0-9._%+\-]+@[A-z0-9.\-]+\.[A-z]{2,4}$"
         required
         title="example@test.com"
         autoComplete="on"
       />
-      <div className="relative flex w-full items-center">
-        <input
-          type={passwordType}
-          placeholder="Password"
-          className=" w-full rounded border-none bg-neutralLight p-3 outline-none dark:bg-neutralLightest"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          pattern="[\w]{4,12}"
-          required
-          title="4 to 12 characters"
-        />
-        {/* eslint-disable */}
-        <span className="absolute right-3 flex w-5">
-          <img
-            src={passwordVisible ? passHide : passShow}
-            alt="show password icon"
-            onClick={() => setPasswordVisible(!passwordVisible)}
-          />
-        </span>
-      </div>
+
+      <InputPassword
+        type={passwordType}
+        name="password"
+        placeholder="Password"
+        value={credentials.password}
+        isVisible={passwordVisible}
+        onInputChange={handleChange}
+        onButtonClick={() => setPasswordVisible(!passwordVisible)}
+      />
+
       {!isSignIn && (
-        <div className="relative flex w-full items-center">
-          <input
-            type={passwordConfType}
-            id="confirm-password"
-            placeholder="Confirm password"
-            className=" w-full rounded border-none bg-neutralLight p-3 outline-none dark:bg-neutralLightest"
-            value={confirmationPassword}
-            onChange={(e) => setConfirmationPassword(e.target.value)}
-            pattern="[\w]{4,12}"
-            required
-          />
-          <span className="absolute right-3 flex w-5">
-            <img
-              src={passwordConfVisible ? passHide : passShow}
-              alt="show password icon"
-              onClick={() => setPasswordConfVisible(!passwordConfVisible)}
-            />
-          </span>
-          {/* eslint-enable */}
-        </div>
+        <InputPassword
+          type={passwordConfType}
+          placeholder="Confirm password"
+          value={confirmationPassword}
+          isVisible={passwordConfVisible}
+          onInputChange={(e) => setConfirmationPassword(e.target.value)}
+          onButtonClick={() => setPasswordConfVisible(!passwordConfVisible)}
+        />
       )}
       <button type="submit" className="connect-button">
         {isSignIn ? "Sign In" : "Register"}
