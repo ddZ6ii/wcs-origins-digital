@@ -1,9 +1,12 @@
-export default function Loader() {
+import PropTypes from "prop-types";
+
+const defaultCSS =
+  "flex w-full items-center justify-center bg-neutralDarkest/50";
+export default function Loader({ message, fullHeight }) {
+  const containerHeight = fullHeight ? "min-h-[calc(100vh-160px)]" : "h-20";
+
   return (
-    <div
-      role="status"
-      className="flex min-h-[calc(100vh-160px)] w-full items-center justify-center bg-neutralDarkest/50"
-    >
+    <div role="status" className={`${defaultCSS} ${containerHeight}`}>
       <svg
         aria-hidden="true"
         className="mr-2 h-8 w-8 animate-spin fill-primaryLightest text-gray-600"
@@ -20,7 +23,17 @@ export default function Loader() {
           fill="currentFill"
         />
       </svg>
-      <span>Loading...</span>
+      <span>{message}</span>
     </div>
   );
 }
+
+Loader.propTypes = {
+  message: PropTypes.string,
+  fullHeight: PropTypes.bool,
+};
+
+Loader.defaultProps = {
+  message: "Loading...",
+  fullHeight: true,
+};
