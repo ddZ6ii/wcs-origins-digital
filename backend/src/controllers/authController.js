@@ -16,7 +16,14 @@ const login = async (req, res) => {
     if (!token) throw new Error("No authentication token returned");
 
     // send back authentication token to the client in a cookie, as well as user info to be stored in the context
-    res.cookie("token", token, { httpOnly: true }).status(200).json(req.user);
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: true,
+      })
+      .status(200)
+      .json(req.user);
   } catch (err) {
     console.error(err);
     res
