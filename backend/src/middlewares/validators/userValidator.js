@@ -22,7 +22,7 @@ const validateUserInfo = (req, res, next) => {
     { abortEarly: false }
   );
 
-  if (error) return res.status(422).json({ validationErrors: error.details });
+  if (error) return res.status(400).json({ validationErrors: error.details });
 
   return next();
 };

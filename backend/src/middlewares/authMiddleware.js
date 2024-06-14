@@ -1,6 +1,5 @@
 const argon2 = require("argon2");
 const models = require("../models");
-const isEmpty = require("../utils/isEmpty");
 
 const verifyEmail = async (req, res, next) => {
   try {
@@ -49,9 +48,6 @@ const verifyPassword = async (req, res, next) => {
 
 const checkForExistingAccount = async (req, res, next) => {
   try {
-    if (isEmpty(req.body))
-      return res.status(400).send("Bad request. Body cannot be empty...");
-
     const [[user]] = await models.user.findByEmail(req.body.email);
     if (user) {
       return res

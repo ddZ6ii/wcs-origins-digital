@@ -2,9 +2,6 @@ const models = require("../models");
 
 const checkForExistingLanguage = async (req, res, next) => {
   try {
-    if (!Object.keys(req.body).length)
-      return res.status(400).send("Bad request. Body cannot be empty...");
-
     const [languages] = await models.language.findAll();
 
     const match = languages.find(

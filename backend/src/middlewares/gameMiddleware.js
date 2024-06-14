@@ -2,9 +2,6 @@ const models = require("../models");
 
 const checkForExistingGame = async (req, res, next) => {
   try {
-    if (!Object.keys(req.body).length)
-      return res.status(400).send("Bad request. Body cannot be empty...");
-
     const [games] = await models.game.findAll();
 
     const match = games.find(
