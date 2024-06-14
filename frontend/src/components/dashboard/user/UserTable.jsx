@@ -1,52 +1,85 @@
-// Packages
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Pagination, ConfigProvider } from "antd";
 import { toast } from "react-toastify";
 
-// Components
+import Loader from "../../common/Loader";
 import RowUser from "./RowUser";
 import RowHead from "../RowHead";
 import RowSearch from "../RowSearch";
 
-// Helpers
-import { filterByText } from "../../../utils/filterTable";
-
-// Hook
 import useAxios from "../../../hooks/useAxios";
 
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 import paginationSettings from "../../../settings/pagination.json";
+import isEmpty from "../../../utils/isEmpty";
+import { filterByText } from "../../../utils/filterTable";
+
+// export to CSV
+const convertToCSV = (data) => {
+  const header = Object.keys(data[0]).join(",");
+  const rows = data.map((item) => Object.values(item).join(","));
+  return [header, ...rows].join("\n");
+};
+const exportToCSV = (data) => {
+  const csvContent = `data:text/csv;charset=utf-8,${convertToCSV(data)}`;
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "userdata.csv");
+  document.body.appendChild(link);
+  link.click();
+};
 
 export default function UserTable() {
+  const [filterText, setFilterText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
-  const [filterText, setFilterText] = useState("");
-  const [flagUsers, setFlagUsers] = useState(false);
+  const { data: users, isLoading } = useAxios("/users");
 
-  const { data: users, isLoading } = useAxios("/users", flagUsers);
-
-  // Pagination logic
+  // table pagination
   const offset = pageSize * currentPage - pageSize;
   const nextPage = offset + pageSize;
 
-  // export to CSV
-  const convertToCSV = (data) => {
-    const header = Object.keys(data[0]).join(",");
-    const rows = data.map((item) => Object.values(item).join(","));
-    return [header, ...rows].join("\n");
-  };
+  const filteredUsers = useMemo(
+    () => filterByText(users, "pseudo", filterText),
+    [users, filterText]
+  );
 
-  const exportToCSV = (data) => {
-    const csvContent = `data:text/csv;charset=utf-8,${convertToCSV(data)}`;
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "userdata.csv");
-    document.body.appendChild(link);
-    link.click();
-  };
+  const userContent = useMemo(
+    () =>
+      !isLoading && !isEmpty(filteredUsers) ? (
+        <>
+          <table className="w-full text-left text-base text-neutralLightest">
+            <RowHead activeTab="userList" />
+            <tbody>
+              {filteredUsers.slice(offset, nextPage).map((user) => (
+                <RowUser key={user.id_user} user={user} />
+              ))}
+            </tbody>
+          </table>
+          <ConfigProvider theme={paginationSettings}>
+            <Pagination
+              pageSizeOptions={[5, 10, 20, 50, 100]}
+              className="py-2 text-center"
+              pageSize={pageSize}
+              current={currentPage}
+              total={filteredUsers.length}
+              onChange={(pageClicked, onPageSize) => {
+                setCurrentPage(pageClicked);
+                setPageSize(onPageSize);
+              }}
+              showSizeChanger
+            />
+          </ConfigProvider>
+        </>
+      ) : (
+        <p className="my-4 text-center">No user found!</p>
+      ),
+    [filteredUsers, pageSize, currentPage]
+  );
+
+  const handleFilterText = (text) => setFilterText(text);
 
   const handleExport = () => {
     exportToCSV(users);
@@ -65,45 +98,12 @@ export default function UserTable() {
         <RowSearch
           activeTab="userList"
           filterText={filterText}
-          setFilterText={setFilterText}
-          setFlagUsers={setFlagUsers}
+          onFilterTextChange={handleFilterText}
           exportData={handleExport}
         />
 
         <div className="overflow-x-auto">
-          {isLoading ? (
-            <p>Loading data...</p>
-          ) : (
-            <table className="w-full text-left text-base text-neutralLightest">
-              <RowHead activeTab="userList" />
-              <tbody>
-                {/* {filterByText(userList, "pseudo", filterText) */}
-                {filterByText(users, "pseudo", filterText)
-                  .slice(offset, nextPage)
-                  .map((user) => (
-                    <RowUser
-                      key={user.id_user}
-                      user={user}
-                      setFlagUsers={setFlagUsers}
-                    />
-                  ))}
-              </tbody>
-            </table>
-          )}
-          <ConfigProvider theme={paginationSettings}>
-            <Pagination
-              pageSizeOptions={[5, 10, 20, 50, 100]}
-              className="py-2 text-center"
-              pageSize={pageSize}
-              current={currentPage}
-              total={users.length}
-              onChange={(pageClicked, onPageSize) => {
-                setCurrentPage(pageClicked);
-                setPageSize(onPageSize);
-              }}
-              showSizeChanger
-            />
-          </ConfigProvider>
+          {isLoading ? <Loader fullHeight={false} /> : userContent}
         </div>
       </div>
     </article>

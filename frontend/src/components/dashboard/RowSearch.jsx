@@ -1,8 +1,6 @@
-// Packages
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-// Components
 import Searchbar from "../common/Searchbar";
 import Button from "../common/Button";
 import ModalVideo from "./video/ModalVideo";
@@ -13,11 +11,11 @@ import ModalGame from "./game/ModalGame";
 export default function RowSearch({
   activeTab,
   filterText,
-  setFilterText,
-  setRefetchGames,
-  setRefetchVideos,
-  setRefetchLanguages,
-  setRefetchCategories,
+  onFilterTextChange,
+  onRefetchGames,
+  onRefetchVideos,
+  onRefetchLanguages,
+  onRefetchCategories,
   exportData,
 }) {
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -50,7 +48,7 @@ export default function RowSearch({
         <ModalVideo
           open={isModalOpened}
           setIsModalOpened={setIsModalOpened}
-          refetchData={setRefetchVideos}
+          refetchData={onRefetchVideos}
         />
       );
     }
@@ -59,7 +57,7 @@ export default function RowSearch({
         <ModalCategory
           open={isModalOpened}
           setIsModalOpened={setIsModalOpened}
-          refetchData={setRefetchCategories}
+          refetchData={onRefetchCategories}
         />
       );
     }
@@ -67,7 +65,7 @@ export default function RowSearch({
       return (
         <ModalLanguage
           open={isModalOpened}
-          refetchData={setRefetchLanguages}
+          refetchData={onRefetchLanguages}
           setIsModalOpened={setIsModalOpened}
         />
       );
@@ -77,7 +75,7 @@ export default function RowSearch({
         <ModalGame
           open={isModalOpened}
           setIsModalOpened={setIsModalOpened}
-          refetchData={setRefetchGames}
+          refetchData={onRefetchGames}
         />
       );
     }
@@ -91,7 +89,7 @@ export default function RowSearch({
           <Searchbar
             className="relative w-full min-w-[200px]"
             filterText={filterText}
-            onFilterTextChange={setFilterText}
+            onFilterTextChange={onFilterTextChange}
           />
         </div>
       </div>
@@ -151,20 +149,20 @@ export default function RowSearch({
 RowSearch.propTypes = {
   activeTab: PropTypes.string.isRequired,
   filterText: PropTypes.string,
-  setFilterText: PropTypes.func,
-  setRefetchLanguages: PropTypes.func,
-  setRefetchCategories: PropTypes.func,
-  setRefetchGames: PropTypes.func,
-  setRefetchVideos: PropTypes.func,
+  onFilterTextChange: PropTypes.func,
+  onRefetchLanguages: PropTypes.func,
+  onRefetchCategories: PropTypes.func,
+  onRefetchGames: PropTypes.func,
+  onRefetchVideos: PropTypes.func,
   exportData: PropTypes.func,
 };
 
 RowSearch.defaultProps = {
   filterText: null,
-  setFilterText: null,
-  setRefetchGames: null,
-  setRefetchVideos: null,
-  setRefetchLanguages: null,
-  setRefetchCategories: null,
+  onFilterTextChange: null,
+  onRefetchGames: null,
+  onRefetchVideos: null,
+  onRefetchLanguages: null,
+  onRefetchCategories: null,
   exportData: null,
 };

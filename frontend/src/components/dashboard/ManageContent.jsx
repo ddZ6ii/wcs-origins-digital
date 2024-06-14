@@ -1,5 +1,3 @@
-// Packages
-import PropTypes from "prop-types";
 import { useState } from "react";
 
 // Components
@@ -10,37 +8,44 @@ import TableCategories from "./category/TableCategories";
 import TableLanguages from "./language/TableLanguages";
 import TableGames from "./game/TableGames";
 
-export default function ManageContent({ filterText, setFilterText }) {
+export default function ManageContent() {
   const [activeTab, setActiveTab] = useState("video");
+  const [filterText, setFilterText] = useState("");
+
   const [refetchGames, setRefetchGames] = useState(false);
   const [refetchVideos, setRefetchVideos] = useState(false);
   const [refetchLanguages, setRefetchLanguages] = useState(false);
   const [refetchCategories, setRefetchCategories] = useState(false);
 
-  const setActiveTabItem = (tab) => setActiveTab(tab);
+  const handleActiveTab = (tab) => setActiveTab(tab);
+  const handleFilterText = (text) => setFilterText(text);
+  const handleRefetchGames = (bool) => setRefetchGames(bool);
+  const handleRefetchVideos = (bool) => setRefetchVideos(bool);
+  const handleRefetchLanguages = (bool) => setRefetchLanguages(bool);
+  const handleRefetchCategories = (bool) => setRefetchCategories(bool);
 
   return (
     <div className="flex w-screen max-w-[calc(100vw-320px)] flex-col gap-8 px-[100px] py-8">
       <h1>Manage Content</h1>
 
       <div className="relative min-w-[600px] overflow-hidden bg-gray-800 shadow-md sm:rounded-lg">
-        <NavTab setActiveTabItem={setActiveTabItem} />
+        <NavTab setActiveTabItem={handleActiveTab} />
 
         <RowSearch
           activeTab={activeTab}
           filterText={filterText}
-          setFilterText={setFilterText}
-          setRefetchGames={setRefetchGames}
-          setRefetchVideos={setRefetchVideos}
-          setRefetchLanguages={setRefetchLanguages}
-          setRefetchCategories={setRefetchCategories}
+          onFilterTextChange={handleFilterText}
+          onRefetchGames={handleRefetchGames}
+          onRefetchVideos={handleRefetchVideos}
+          onRefetchLanguages={handleRefetchLanguages}
+          onRefetchCategories={handleRefetchCategories}
         />
 
         {activeTab === "video" && (
           <TableVideos
             filterText={filterText}
             refetchFlag={refetchVideos}
-            setRefetchFlag={setRefetchVideos}
+            onRefetch={handleRefetchVideos}
           />
         )}
 
@@ -48,7 +53,7 @@ export default function ManageContent({ filterText, setFilterText }) {
           <TableCategories
             filterText={filterText}
             refetchFlag={refetchCategories}
-            setRefetchFlag={setRefetchCategories}
+            onRefetch={handleRefetchCategories}
           />
         )}
 
@@ -56,7 +61,7 @@ export default function ManageContent({ filterText, setFilterText }) {
           <TableLanguages
             filterText={filterText}
             refetchFlag={refetchLanguages}
-            setRefetchFlag={setRefetchLanguages}
+            onRefetch={handleRefetchLanguages}
           />
         )}
 
@@ -64,15 +69,10 @@ export default function ManageContent({ filterText, setFilterText }) {
           <TableGames
             filterText={filterText}
             refetchFlag={refetchGames}
-            setRefetchFlag={setRefetchGames}
+            onRefetch={handleRefetchGames}
           />
         )}
       </div>
     </div>
   );
 }
-
-ManageContent.propTypes = {
-  filterText: PropTypes.string.isRequired,
-  setFilterText: PropTypes.func.isRequired,
-};
