@@ -1,18 +1,11 @@
-// Packages
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-// Components
 import InputPassword from "./InputPassword";
 
-// Custom Hooks
 import useAuth from "../../hooks/useAuth";
-
-// Services
 import * as User from "../../services/users";
-
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../settings/toastify.json";
 
 const initialCredentials = { email: "", password: "" };
@@ -35,16 +28,14 @@ export default function SignForm({ isSignIn }) {
     e.preventDefault();
     try {
       if (isSignIn) {
-        // request sign-in from database
-        const { data: user } = await User.login(credentials);
-        updateAccount(user);
+        const { data: userInfo } = await User.login(credentials);
+        updateAccount(userInfo);
       }
       if (!isSignIn) {
         // make sure password and confirmation password match
         if (credentials.password !== confirmationPassword) {
           toast.warn(`Passwords do not match!`, TOAST_DEFAULT_CONFIG);
         } else {
-          // register new user to database
           const res = await User.register(credentials);
 
           if (res?.status === 201) {

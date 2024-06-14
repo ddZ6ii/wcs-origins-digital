@@ -1,25 +1,32 @@
 import { useCallback, useEffect, useState } from "react";
+import { retrieveUserInfo } from "../services/users";
+import isEmpty from "../utils/isEmpty";
 
-const STORAGE_KEY = "account";
+const STORAGE_KEY = "user";
 
-const initialAccount = { id_plan: undefined };
-
-const initAccount = () => {
-  const accountInfo = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
-  return accountInfo ?? initialAccount;
+const initialAccount = {
+  id_user: null,
+  email: null,
+  pseudo: null,
+  is_admin: null,
+  id_plan: null,
+  plan: null,
 };
 
-const getAuthStatus = (planId) => {
-  if (planId === undefined) return "unknown";
-  if (planId === null || planId === 1 || planId === 3) return "authenticated";
-  return "guest";
+const initAccount = () => {
+  const user = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
+  if (user) return { ...initialAccount, id_user: user.id };
+  return initialAccount;
 };
 
 export default function authStore() {
   const [account, setAccount] = useState(initAccount);
 
-  const updateAccount = useCallback((userInfo) => {
-    setAccount(userInfo);
+  const isAdmin = Boolean(account.is_admin);
+  const isLoggedIn = !isEmpty(account.id_user);
+
+  const updateAccount = useCallback((accountInfo) => {
+    setAccount(accountInfo);
   }, []);
 
   const resetAccount = useCallback(() => {
@@ -27,12 +34,21 @@ export default function authStore() {
     sessionStorage.removeItem(STORAGE_KEY);
   }, []);
 
-  const isAdmin = Boolean(account?.is_admin);
-  const isLoggedIn = getAuthStatus(account.id_plan) === "authenticated";
-
+  // retrieve user info from backend using JWT stored in the cookie (in case of page refresh)
   useEffect(() => {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(account));
-  }, [account]);
+    const getuserInfo = async () => {
+      const { data: accountInfo } = await retrieveUserInfo(account.id_user);
+      setAccount(accountInfo);
+    };
+    if (account.id_user) getuserInfo();
+  }, []);
+
+  // store user id in session storage to retrieve user info
+  useEffect(() => {
+    const { id_user: userId } = account;
+    if (userId)
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ id: userId }));
+  }, [account.id_user]);
 
   return {
     account,
