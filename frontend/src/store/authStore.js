@@ -8,7 +8,7 @@ const initialAccount = {
   id_user: null,
   email: null,
   pseudo: null,
-  is_admin: null,
+  role: null,
   id_plan: null,
   plan: null,
 };
@@ -22,7 +22,7 @@ const initAccount = () => {
 export default function authStore() {
   const [account, setAccount] = useState(initAccount);
 
-  const isAdmin = Boolean(account.is_admin);
+  const isAdmin = account.role === 1;
   const isLoggedIn = !isEmpty(account.id_user);
 
   const updateAccount = useCallback((accountInfo) => {

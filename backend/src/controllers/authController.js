@@ -8,7 +8,7 @@ const login = async (req, res) => {
 
     // user credentials have been verified by previous middleware (user is authenticated)_
     // create JWT info (token with expiration time)
-    const payload = { sub: req.user.id_user, role: req.user.is_admin };
+    const payload = { sub: req.user.id_user, role: req.user.role };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "2h",
     });
