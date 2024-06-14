@@ -30,7 +30,10 @@ export default function useAxios(endpoint, refetchFlag = null) {
     } catch (err) {
       if (err.response.status !== 404) {
         console.error("Error fetching data from API:", err);
-        if (isMounted) setError(err);
+        if (isMounted) {
+          setError(err);
+          setData([]);
+        }
       }
     } finally {
       if (isMounted) setIsLoading(false);
