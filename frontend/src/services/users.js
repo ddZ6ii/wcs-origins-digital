@@ -2,14 +2,16 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-export const getUsers = (controller) => {
-  const { signal } = controller;
-  return axios.get(`${BASE_URL}/users`, { signal });
+export const getUsers = () => {
+  const controller = new AbortController();
+  return axios.get(`${BASE_URL}/users`, { signal: controller.signal });
 };
 
-export const getUserStats = (controller, userId) => {
-  const { signal } = controller;
-  return axios.get(`${BASE_URL}/users/stats/${userId}`, { signal });
+export const getUserStats = (userId) => {
+  const controller = new AbortController();
+  return axios.get(`${BASE_URL}/users/stats/${userId}`, {
+    signal: controller.signal,
+  });
 };
 
 export const login = (credentials) => {

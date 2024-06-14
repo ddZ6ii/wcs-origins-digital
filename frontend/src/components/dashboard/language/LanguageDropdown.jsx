@@ -1,19 +1,14 @@
-// Packages
-import PropTypes from "prop-types";
 import { useRef, useEffect } from "react";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-// Components
 import Button from "../../common/Button";
 import Input from "../../common/Input";
 
-// Services
-import { modifyLanguageById } from "../../../services/languages";
+import * as Languages from "../../../services/languages";
 
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
-// Style
 import styles from "../Table.module.css";
 
 export default function LanguageDropdown({
@@ -27,7 +22,7 @@ export default function LanguageDropdown({
     e.preventDefault();
     const name = inputRef.current.value.trim().toLowerCase();
     try {
-      const res = await modifyLanguageById({ name }, language.id);
+      const res = await Languages.modifyById({ name }, language.id);
       if (res?.status === 204) {
         toast.success("Language successfully updated!", TOAST_DEFAULT_CONFIG);
         refetchData((prev) => !prev);

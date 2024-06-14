@@ -14,8 +14,8 @@ export const getByName = (gameName) => {
   });
 };
 
-export const modifyById = (body, id) => {
-  return axios.put(`${BASE_URL}/games/${id}`, body, {
+export const modifyById = (body, gameId) => {
+  return axios.put(`${BASE_URL}/games/${gameId}`, body, {
     withCredentials: true,
   });
 };
@@ -31,8 +31,8 @@ export const add = (body) =>
     withCredentials: true,
   });
 
-export const remove = (id) =>
-  axios.delete(`${BASE_URL}/games/${id}`, {
+export const remove = (gameId) =>
+  axios.delete(`${BASE_URL}/games/${gameId}`, {
     withCredentials: true,
   });
 

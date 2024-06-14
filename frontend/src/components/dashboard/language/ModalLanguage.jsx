@@ -1,20 +1,15 @@
-// Packages
 import { Modal } from "antd";
-import PropTypes from "prop-types";
 import { useRef } from "react";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-// Components
 import Button from "../../common/Button";
 import Input from "../../common/Input";
 
-// Services
-import { addLanguage } from "../../../services/languages";
+import * as Languages from "../../../services/languages";
 
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
-// Style
 import styles from "../Table.module.css";
 
 export default function ModalLanguage({ open, setIsModalOpened, refetchData }) {
@@ -28,7 +23,7 @@ export default function ModalLanguage({ open, setIsModalOpened, refetchData }) {
   const handleSubmit = (e) => {
     const name = inputRef.current.value.trim().toLowerCase();
     e.preventDefault();
-    addLanguage({ name })
+    Languages.add({ name })
       .then((res) => {
         if (res?.status === 201)
           toast.success("Language successfully added!", TOAST_DEFAULT_CONFIG);

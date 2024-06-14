@@ -1,19 +1,13 @@
-// Packages
 import { useState } from "react";
-import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-// Components
-import CatDropdown from "./CatDropdown";
 import Button from "../../common/Button";
+import CatDropdown from "./CatDropdown";
 
-// Helpers
+import * as Categories from "../../../services/categories";
 import capitalizeText from "../../../utils/capitalize";
 
-// Services
-import { deleteCategory } from "../../../services/categories";
-
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 export default function RowCategory({ category, refetchData }) {
@@ -23,7 +17,7 @@ export default function RowCategory({ category, refetchData }) {
 
   const handleDeleteCategory = async (id) => {
     try {
-      const response = await deleteCategory(id);
+      const response = await Categories.remove(id);
       if (response?.status === 204) {
         toast.success("Category successfully deleted!", TOAST_DEFAULT_CONFIG);
         refetchData((prev) => !prev);

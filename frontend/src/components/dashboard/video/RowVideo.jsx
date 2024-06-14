@@ -1,28 +1,19 @@
-// Packages
 import { useState } from "react";
-import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-// Components
-import VideoDropdown from "./VideoDropdown";
 import Button from "../../common/Button";
+import VideoDropdown from "./VideoDropdown";
 
-// Hooks
 import useAxios from "../../../hooks/useAxios";
 
 // Services
-import {
-  deleteVideo,
-  deleteVideoThumbnail,
-  deleteVideoFile,
-} from "../../../services/videos";
+import * as Videos from "../../../services/videos";
 
-// Helpers
 import capitalizeText from "../../../utils/capitalize";
 import checkRowStatus from "../../../utils/checkRowStatus";
 import displayCategories from "../../../utils/displayCategories";
 
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 export default function RowVideo({ video, refetchData }) {
@@ -36,15 +27,15 @@ export default function RowVideo({ video, refetchData }) {
   const handleDeleteVideo = async (id) => {
     try {
       // first delete video files from public folder...
-      await deleteVideoThumbnail({
+      await Videos.deleteThumbnail({
         data: { thumbnail: video.thumbnail },
       });
-      await deleteVideoFile({
+      await Videos.deleteMedia({
         data: { url_video: video.url_video },
       });
 
       // ... then delete entry from database
-      const response = await deleteVideo(id);
+      const response = await Videos.remove(id);
 
       if (response?.status === 204) {
         toast.success("Video successfully deleted!", TOAST_DEFAULT_CONFIG);

@@ -37,12 +37,13 @@ export const getCountByGame = async (gameId) => {
 
 export const getFavoriteVideos = (userId) => {
   const controller = new AbortController();
-  const { signal } = controller;
-  return axios.get(`${BASE_URL}/user-video/${userId}`, { signal });
+  return axios.get(`${BASE_URL}/user-video/${userId}`, {
+    signal: controller.signal,
+  });
 };
 
-export const modifyVideoById = (body, id) =>
-  axios.put(`${BASE_URL}/videos/${id}`, body, {
+export const modifyById = (body, videoId) =>
+  axios.put(`${BASE_URL}/videos/${videoId}`, body, {
     withCredentials: true,
   });
 
@@ -60,23 +61,23 @@ export const unfavoriteVideo = (videoId, userId) => {
   );
 };
 
-export const addVideoThumbnail = (form) =>
+export const addThumbnail = (form) =>
   axios.post(`${BASE_URL}/upload/thumbnails/videos`, form, {
     withCredentials: true,
   });
 
-export const addVideoMedia = (form) =>
+export const addMedia = (form) =>
   axios.post(`${BASE_URL}/upload/videos`, form, {
     withCredentials: true,
   });
 
-export const addVideo = (body) =>
+export const add = (body) =>
   axios.post(`${BASE_URL}/videos/`, body, {
     withCredentials: true,
   });
 
-export const deleteVideo = (id) =>
-  axios.delete(`${BASE_URL}/videos/${id}`, {
+export const remove = (videoId) =>
+  axios.delete(`${BASE_URL}/videos/${videoId}`, {
     withCredentials: true,
   });
 
@@ -90,13 +91,13 @@ export const deleteVideoCategory = (id) =>
     withCredentials: true,
   });
 
-export const deleteVideoThumbnail = (data) =>
+export const deleteThumbnail = (data) =>
   axios.delete(`${BASE_URL}/upload/thumbnails/videos`, {
     ...data,
     withCredentials: true,
   });
 
-export const deleteVideoFile = (data) =>
+export const deleteMedia = (data) =>
   axios.delete(`${BASE_URL}/upload/videos`, {
     ...data,
     withCredentials: true,

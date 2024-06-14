@@ -1,19 +1,15 @@
-// Packages
-import PropTypes from "prop-types";
 import { useRef, useEffect } from "react";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-// Components
 import Button from "../../common/Button";
 import Input from "../../common/Input";
 
 // Services
-import { modifyCategoryById } from "../../../services/categories";
+import * as Categories from "../../../services/categories";
 
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
-// Style
 import styles from "../Table.module.css";
 
 export default function CatDropdown({ category, toggleDropdown, refetchData }) {
@@ -23,7 +19,7 @@ export default function CatDropdown({ category, toggleDropdown, refetchData }) {
     e.preventDefault();
     const name = inputRef.current.value.trim().toLowerCase();
     try {
-      const res = await modifyCategoryById({ name }, category.id);
+      const res = await Categories.modifyById({ name }, category.id);
       if (res?.status === 204) {
         toast.success("Category successfully updated!", TOAST_DEFAULT_CONFIG);
         refetchData((prev) => !prev);
