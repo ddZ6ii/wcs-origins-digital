@@ -9,7 +9,7 @@ import RowHead from "../RowHead";
 import RowSearch from "../RowSearch";
 
 // Helpers
-import { filterByText } from "../../../helpers/filterTable";
+import { filterByText } from "../../../utils/filterTable";
 
 // Hook
 import useAxios from "../../../hooks/useAxios";

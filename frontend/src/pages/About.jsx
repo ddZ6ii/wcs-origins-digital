@@ -1,15 +1,15 @@
 // Components
 import Contact from "../components/about/Contact";
-import Slider from "../components/utilities/Slider";
-import Card from "../components/utilities/Card";
-import Footer from "../components/utilities/Footer";
+import Slider from "../components/common/Slider";
+import Card from "../components/common/Card";
+import Footer from "../components/common/Footer";
 
 // Data
 import figures from "../data/keyFigures.json";
 import infos from "../data/findUs.json";
 
 // Style
-import styles from "../css/Slider.module.css";
+import styles from "../components/common/Slider.module.css";
 
 export default function About() {
   return (
@@ -44,14 +44,14 @@ export default function About() {
               className="min-w-[80px]"
               width="80"
               height="auto"
-              src="../assets/img/aboutus/origins_digital_dark.svg"
+              src="./src/assets/img/aboutus/origins_digital_dark.svg"
               alt="logo_origins_digital"
             />
             <img
               className="min-w-[200px]"
               width="200"
               height="auto"
-              src="../assets/img/aboutus/rewind.svg"
+              src="./src/assets/img/aboutus/rewind.svg"
               alt="logo_rewind_netco"
             />
           </div>

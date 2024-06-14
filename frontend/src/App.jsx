@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 
 // Pages
 import Home from "./pages/Home";
@@ -19,14 +18,10 @@ import DashLayout from "./layout/DashLayout";
 import useAuth from "./hooks/useAuth";
 
 // Components
-import Navbar from "./components/utilities/Navbar";
+import Navbar from "./components/common/Navbar";
 
 export default function App() {
-  const { isLoggedIn, isAdmin, loadUserFromLocalStorage } = useAuth();
-
-  useEffect(() => {
-    loadUserFromLocalStorage();
-  }, []);
+  const { isLoggedIn, isAdmin } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradientDarkTheme">

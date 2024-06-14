@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import groupVideoCategory from "../helpers/groupVideoCategory";
+import groupVideoCategory from "../utils/groupVideoCategory";
 
 export default function useAxios(endpoint, refetchFlag = null) {
   const [data, setData] = useState([]);

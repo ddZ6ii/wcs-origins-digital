@@ -2,9 +2,9 @@
 import PropTypes from "prop-types";
 
 // Helpers
-import capitalizeText from "../../helpers/capitalize";
-import checkRowStatus from "../../helpers/checkRowStatus";
-import displayCategories from "../../helpers/displayCategories";
+import capitalizeText from "../../utils/capitalize";
+import checkRowStatus from "../../utils/checkRowStatus";
+import displayCategories from "../../utils/displayCategories";
 
 export default function RowStatic({ video }) {
   return (

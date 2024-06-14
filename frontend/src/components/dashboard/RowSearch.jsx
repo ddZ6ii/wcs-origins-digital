@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 
 // Components
-import Searchbar from "../utilities/Searchbar";
-import Button from "../utilities/Button";
+import Searchbar from "../common/Searchbar";
+import Button from "../common/Button";
 import ModalVideo from "./video/ModalVideo";
 import ModalCategory from "./category/ModalCategory";
 import ModalLanguage from "./language/ModalLanguage";

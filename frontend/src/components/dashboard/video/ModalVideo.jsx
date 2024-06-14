@@ -5,10 +5,10 @@ import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 // Components
-import Button from "../../utilities/Button";
-import Input from "../../utilities/Input";
-import Label from "../../utilities/Label";
-import Dropdown from "../../utilities/Dropdown";
+import Button from "../../common/Button";
+import Input from "../../common/Input";
+import Label from "../../common/Label";
+import Dropdown from "../../common/Dropdown";
 
 // Hooks
 import useAxios from "../../../hooks/useAxios";
@@ -19,9 +19,9 @@ import {
   updateFromFileInput,
   updateFromDropdownRadio,
   updateFromDropdownCheckbox,
-} from "../../../helpers/updateFormData";
-import formatVideoBodyRequest from "../../../helpers/formatVideoBodyRequest";
-import checkVideoFormCompleted from "../../../helpers/checkVideoFormCompleted";
+} from "../../../utils/updateFormData";
+import formatVideoBodyRequest from "../../../utils/formatVideoBodyRequest";
+import checkVideoFormCompleted from "../../../utils/checkVideoFormCompleted";
 
 // Services
 import {
@@ -35,7 +35,7 @@ import {
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 // Styles
-import styles from "../../../css/Table.module.css";
+import styles from "../Table.module.css";
 
 export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
   const inputRef = useRef(null);

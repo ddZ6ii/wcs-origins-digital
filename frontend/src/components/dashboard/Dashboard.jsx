@@ -4,22 +4,22 @@ import { Pagination, ConfigProvider } from "antd";
 import { useState } from "react";
 
 // Components
-import RowStatic from "./dashboard/RowStatic";
-import RowHead from "./dashboard/RowHead";
-import RowSearch from "./dashboard/RowSearch";
-import Card from "./utilities/Card";
+import RowStatic from "./RowStatic";
+import RowHead from "./RowHead";
+import RowSearch from "./RowSearch";
+import Card from "../common/Card";
 
 // Custom hooks
-import useAxios from "../hooks/useAxios";
+import useAxios from "../../hooks/useAxios";
 
 // Helpers
-import { filterByText } from "../helpers/filterTable";
+import { filterByText } from "../../utils/filterTable";
 
 // Settings
-import paginationSettings from "../settings/pagination.json";
+import paginationSettings from "../../settings/pagination.json";
 
 // Data
-import adminStats from "../data/adminStats.json";
+import adminStats from "../../data/adminStats.json";
 
 export default function Dashboard({ filterText, setFilterText }) {
   const [currentPage, setCurrentPage] = useState(1);

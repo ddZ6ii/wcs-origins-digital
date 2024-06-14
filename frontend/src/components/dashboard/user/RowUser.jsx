@@ -2,7 +2,7 @@
 import PropTypes from "prop-types";
 
 // Helpers
-import capitalizeText from "../../../helpers/capitalize";
+import capitalizeText from "../../../utils/capitalize";
 
 export default function RowUser({ user }) {
   return (

@@ -11,7 +11,7 @@ import RowGame from "./RowGame";
 import useAxios from "../../../hooks/useAxios";
 
 // Helpers
-import { filterByText } from "../../../helpers/filterTable";
+import { filterByText } from "../../../utils/filterTable";
 
 // Settings
 import paginationSettings from "../../../settings/pagination.json";

@@ -2,30 +2,32 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
 // Custom Hooks
-import useUserContext from "../../hooks/useUserContext";
 import useAuth from "../../hooks/useAuth";
 
 // Data
 import menus from "../../data/dashbarAdminMenus.json";
 
+// Services
+import * as User from "../../services/users";
+
 // Styles
-import styles from "../../css/DashNavbar.module.css";
+import styles from "./DashNavbar.module.css";
 
 export default function DashNavbar() {
   const navigate = useNavigate();
-  const { setAccount } = useUserContext();
-  const { clearUserFromLocalStorage, isAdmin, logoutUser } = useAuth();
+
+  const { resetAccount, isAdmin } = useAuth();
 
   const handleClick = async () => {
-    // request logout
-    await logoutUser();
-    // update context
-    setAccount({
-      id_plan: undefined,
-    });
-
-    clearUserFromLocalStorage();
-    navigate("/");
+    try {
+      // logout user
+      await User.logout();
+    } catch (err) {
+      console.error("An error occured during logout...");
+    } finally {
+      resetAccount();
+      navigate("/");
+    }
   };
 
   return (

@@ -8,7 +8,7 @@ import Card from "./Card";
 import useAuth from "../../hooks/useAuth";
 
 // Styles
-import styles from "../../css/Slider.module.css";
+import styles from "./Slider.module.css";
 
 export default function SliderVideo({
   videos,
@@ -92,7 +92,7 @@ export default function SliderVideo({
                         className={`${styles.overlay__wrapper} ${customClassOverlayWrapper}`}
                       >
                         <img
-                          src="../assets/icon/utility/lock.svg"
+                          src="./src/assets/icon/utility/lock.svg"
                           alt={video.title}
                           className={styles.overlay__wrapper__lock}
                         />

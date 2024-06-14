@@ -4,15 +4,17 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 // Custom Hooks
-import useUserContext from "../../hooks/useUserContext";
 import useAuth from "../../hooks/useAuth";
 
-// Assets
-import passHide from "../../../public/assets/icon/utility/eyeSlash.svg";
-import passShow from "../../../public/assets/icon/dashboard/watch.svg";
+// Services
+import * as User from "../../services/users";
 
 // Settings
 import TOAST_DEFAULT_CONFIG from "../../settings/toastify.json";
+
+// Assets
+import passHide from "../../assets/icon/utility/eyeSlash.svg";
+import passShow from "../../assets/icon/dashboard/watch.svg";
 
 export default function SignForm({ isSignIn }) {
   const [email, setEmail] = useState("");
@@ -21,8 +23,7 @@ export default function SignForm({ isSignIn }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordConfVisible, setPasswordConfVisible] = useState(false);
 
-  const { setAccount } = useUserContext();
-  const { setUserToLocalStorage, loginUser, registerUser } = useAuth();
+  const { updateAccount } = useAuth();
 
   const passwordType = passwordVisible ? "text" : "password";
   const passwordConfType = passwordConfVisible ? "text" : "password";
@@ -32,14 +33,11 @@ export default function SignForm({ isSignIn }) {
     try {
       if (isSignIn) {
         // request sign-in from database
-        const { data: user } = await loginUser({
+        const { data: user } = await User.login({
           email,
           password,
         });
-        // update local storage (prevent page refresh)
-        setUserToLocalStorage(user);
-        // update user context
-        setAccount(user);
+        updateAccount(user);
       }
       if (!isSignIn) {
         // make sure password and confirmation password match
@@ -47,7 +45,7 @@ export default function SignForm({ isSignIn }) {
           toast.warn(`Passwords do not match!`, TOAST_DEFAULT_CONFIG);
         } else {
           // register new user to database
-          const res = await registerUser({
+          const res = await User.register({
             email,
             password,
           });

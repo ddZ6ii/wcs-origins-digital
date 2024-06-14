@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 // Components
 import VideoDropdown from "./VideoDropdown";
-import Button from "../../utilities/Button";
+import Button from "../../common/Button";
 
 // Hooks
 import useAxios from "../../../hooks/useAxios";
@@ -18,9 +18,9 @@ import {
 } from "../../../services/videos";
 
 // Helpers
-import capitalizeText from "../../../helpers/capitalize";
-import checkRowStatus from "../../../helpers/checkRowStatus";
-import displayCategories from "../../../helpers/displayCategories";
+import capitalizeText from "../../../utils/capitalize";
+import checkRowStatus from "../../../utils/checkRowStatus";
+import displayCategories from "../../../utils/displayCategories";
 
 // Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";

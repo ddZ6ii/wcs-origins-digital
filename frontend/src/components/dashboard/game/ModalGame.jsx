@@ -5,8 +5,8 @@ import { useRef } from "react";
 import { toast } from "react-toastify";
 
 // Components
-import Button from "../../utilities/Button";
-import Input from "../../utilities/Input";
+import Button from "../../common/Button";
+import Input from "../../common/Input";
 
 // Services
 import { addGame, addGameThumbnail } from "../../../services/games";
@@ -15,7 +15,7 @@ import { addGame, addGameThumbnail } from "../../../services/games";
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 // Styles
-import styles from "../../../css/Table.module.css";
+import styles from "../Table.module.css";
 
 export default function ModalGame({ open, setIsModalOpened, refetchData }) {
   const inputRef = useRef();

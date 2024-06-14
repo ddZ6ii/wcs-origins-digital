@@ -2,20 +2,20 @@
 import { useState, useEffect } from "react";
 
 // Components
-import Card from "./utilities/Card";
-import TableFavorite from "./dashboard/favorite/TableFavorite";
+import Card from "../common/Card";
+import TableFavorite from "./favorite/TableFavorite";
 
 // Custom hooks
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 
 // Helper
-import capitalizeText from "../helpers/capitalize";
+import capitalizeText from "../../utils/capitalize";
 
 // Services
-import { getUserStats } from "../services/users";
+import { getUserStats } from "../../services/users";
 
 // Data
-import userStats from "../data/userStats.json";
+import userStats from "../../data/userStats.json";
 
 export default function DashboardUser() {
   const [dbStats, setDbStats] = useState([]);
