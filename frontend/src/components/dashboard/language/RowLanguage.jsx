@@ -1,41 +1,62 @@
-// Packages
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 
-// Components
-import LanguageDropdown from "./LanguageDropdown";
 import Button from "../../common/Button";
+import ConfirmModal from "../../common/ConfirmModal";
+import LanguageDropdown from "./LanguageDropdown";
 
-// Helpers
+import * as Languages from "../../../services/languages";
+import * as Videos from "../../../services/videos";
 import capitalizeText from "../../../utils/capitalize";
 
-// Services
-import { deleteLanguage } from "../../../services/languages";
-
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 export default function RowLanguage({ language, refetchData }) {
   const [isToggled, setIsToggled] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [count, setCount] = useState(null);
 
   const toggleDropdown = () => setIsToggled(!isToggled);
 
-  const handleDeleteLanguage = (id) => {
-    deleteLanguage(id)
-      .then((res) => {
-        if (res?.status === 204)
-          toast.success("Language successfully deleted!", TOAST_DEFAULT_CONFIG);
+  const hasRelatedContent = async (languageId) => {
+    const videoCount = await Videos.getCountByLanguage(languageId);
+    setCount(videoCount);
+    return Boolean(videoCount);
+  };
+
+  const deleteLanguage = async (languageId) => {
+    try {
+      const response = await Languages.remove(languageId);
+      if (response?.status === 204) {
+        toast.success("Language successfully deleted!", TOAST_DEFAULT_CONFIG);
         refetchData((prev) => !prev);
-      })
-      .catch((err) => {
-        console.error(err);
-        if (err.response.status === 404) {
-          toast.error(`${err.response.data}`, TOAST_DEFAULT_CONFIG);
-        } else {
-          toast.error(`${err.response.statusText}!`, TOAST_DEFAULT_CONFIG);
-        }
-      });
+      }
+    } catch (err) {
+      console.error(err);
+      const { response } = err;
+      const notification =
+        response.status === 404 ? response.data : response.statusText;
+      toast.error(notification, TOAST_DEFAULT_CONFIG);
+    }
+  };
+
+  const handleCancel = () => setShowModal(false);
+
+  const handleConfirm = async () => {
+    await deleteLanguage(language.id);
+    setShowModal(false);
+  };
+
+  const handleDeleteLanguage = async (id) => {
+    try {
+      const needConfirmation = await hasRelatedContent(id);
+      if (needConfirmation) return setShowModal(true);
+      await deleteLanguage(id);
+    } catch (err) {
+      console.error(err);
+    }
+    return null;
   };
 
   return (
@@ -86,6 +107,7 @@ export default function RowLanguage({ language, refetchData }) {
           </span>
         </td>
       </tr>
+
       {isToggled && (
         <LanguageDropdown
           language={language}
@@ -93,6 +115,23 @@ export default function RowLanguage({ language, refetchData }) {
           refetchData={refetchData}
         />
       )}
+
+      <ConfirmModal
+        open={showModal}
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+      >
+        {count && (
+          <p className="text-sm">
+            <span className="font-bold text-primaryLight">{count} </span>
+            videos are related to "
+            <span className="font-bold text-primaryLight">
+              {capitalizeText(language.name)}
+            </span>
+            " and will also be removed...
+          </p>
+        )}
+      </ConfirmModal>
     </>
   );
 }

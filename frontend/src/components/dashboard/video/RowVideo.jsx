@@ -44,18 +44,18 @@ export default function RowVideo({ video, refetchData }) {
       });
 
       // ... then delete entry from database
-      const res = await deleteVideo(id);
+      const response = await deleteVideo(id);
 
-      if (res?.status === 204)
+      if (response?.status === 204) {
         toast.success("Video successfully deleted!", TOAST_DEFAULT_CONFIG);
-      refetchData((prev) => !prev);
+        refetchData((prev) => !prev);
+      }
     } catch (err) {
       console.error(err);
-      if (err.response.status === 404) {
-        toast.error(`${err.response.data}`, TOAST_DEFAULT_CONFIG);
-      } else {
-        toast.error(`${err.response.statusText}!`, TOAST_DEFAULT_CONFIG);
-      }
+      const { response } = err;
+      const notification =
+        response.status === 404 ? response.data : response.statusText;
+      toast.error(notification, TOAST_DEFAULT_CONFIG);
     }
   };
 

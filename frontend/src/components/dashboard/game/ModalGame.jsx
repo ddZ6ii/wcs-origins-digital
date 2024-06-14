@@ -1,20 +1,15 @@
-// Packages
-import { Modal } from "antd";
-import PropTypes from "prop-types";
 import { useRef } from "react";
+import { Modal } from "antd";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-// Components
 import Button from "../../common/Button";
 import Input from "../../common/Input";
 
-// Services
-import { addGame, addGameThumbnail } from "../../../services/games";
+import * as Games from "../../../services/games";
 
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
-// Styles
 import styles from "../Table.module.css";
 
 export default function ModalGame({ open, setIsModalOpened, refetchData }) {
@@ -36,9 +31,9 @@ export default function ModalGame({ open, setIsModalOpened, refetchData }) {
     try {
       const {
         data: { url_file: gameThumbUrl },
-      } = await addGameThumbnail(formData);
+      } = await Games.addThumbnail(formData);
 
-      const response = await addGame({
+      const response = await Games.add({
         name: gameName,
         thumbnail: gameThumbUrl,
       });

@@ -1,46 +1,68 @@
-// Packages
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 
-// Components
-import GameDropdown from "./GameDropdown";
 import Button from "../../common/Button";
+import ConfirmModal from "../../common/ConfirmModal";
+import GameDropdown from "./GameDropdown";
 
-// Helpers
+import * as Games from "../../../services/games";
+import * as Videos from "../../../services/videos";
 import capitalizeText from "../../../utils/capitalize";
 
-// Services
-import { deleteGame, deleteGameThumbnail } from "../../../services/games";
-
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 export default function RowGame({ game, refetchData }) {
   const [isToggled, setIsToggled] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [count, setCount] = useState(null);
 
   const toggleDropdown = () => setIsToggled(!isToggled);
 
-  const handleDeleteGame = async (id) => {
+  const hasRelatedContent = async (gameId) => {
+    const gameCount = await Videos.getCountByGame(gameId);
+    setCount(gameCount);
+    return Boolean(gameCount);
+  };
+
+  const deleteGame = async (gameId) => {
     try {
       // first delete game thumbnail from public folder...
-      await deleteGameThumbnail({
+      await Games.deleteThumbnail({
         data: { thumbnail: game.thumbnail },
       });
 
       // ... then delete entry from database
-      const res = await deleteGame(id);
-      if (res?.status === 204)
+      const response = await Games.remove(gameId);
+      if (response?.status === 204) {
         toast.success("Game successfully deleted!", TOAST_DEFAULT_CONFIG);
-      refetchData((prev) => !prev);
+        refetchData((prev) => !prev);
+      }
     } catch (err) {
       console.error(err);
-      if (err.response.status === 404) {
-        toast.error(`${err.response.data}`, TOAST_DEFAULT_CONFIG);
-      } else {
-        toast.error(`${err.response.statusText}!`, TOAST_DEFAULT_CONFIG);
-      }
+      const { response } = err;
+      const notification =
+        response.status === 404 ? response.data : response.statusText;
+      toast.error(notification, TOAST_DEFAULT_CONFIG);
     }
+  };
+
+  const handleCancel = () => setShowModal(false);
+
+  const handleConfirm = async () => {
+    await deleteGame(game.id);
+    setShowModal(false);
+  };
+
+  const handleDeleteGame = async (gameId) => {
+    try {
+      const needConfirmation = await hasRelatedContent(gameId);
+      if (needConfirmation) return setShowModal(true);
+      await deleteGame(gameId);
+    } catch (err) {
+      console.error(err);
+    }
+    return null;
   };
 
   return (
@@ -98,6 +120,7 @@ export default function RowGame({ game, refetchData }) {
           </span>
         </td>
       </tr>
+
       {isToggled && (
         <GameDropdown
           game={game}
@@ -105,6 +128,23 @@ export default function RowGame({ game, refetchData }) {
           refetchData={refetchData}
         />
       )}
+
+      <ConfirmModal
+        open={showModal}
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+      >
+        {count && (
+          <p className="text-sm">
+            <span className="font-bold text-primaryLight">{count} </span>
+            videos are related to "
+            <span className="font-bold text-primaryLight">
+              {capitalizeText(game.name)}
+            </span>
+            " and will also be removed...
+          </p>
+        )}
+      </ConfirmModal>
     </>
   );
 }
