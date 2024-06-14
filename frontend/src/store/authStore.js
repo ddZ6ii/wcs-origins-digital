@@ -17,6 +17,7 @@ export default function authStore() {
   const [account, setAccount] = useState(initialAccount);
 
   const isAdmin = account.role === 1;
+  const isPremium = account.id_plan === 3;
   const isLoggedIn = !isEmpty(account.id_user);
 
   const updateAccount = useCallback((accountInfo) => {
@@ -56,6 +57,7 @@ export default function authStore() {
   return {
     account,
     isAdmin,
+    isPremium,
     isLoggedIn,
     updateAccount,
     resetAccount,
