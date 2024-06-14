@@ -1,26 +1,18 @@
-// Packages
+import { useMemo, useState } from "react";
 import PropTypes from "prop-types";
-import { useState } from "react";
 import { Pagination, ConfigProvider } from "antd";
 
-// Components
+import Loader from "../../common/Loader";
 import RowHead from "../RowHead";
 import RowGame from "./RowGame";
 
-// Custom hooks
 import useAxios from "../../../hooks/useAxios";
 
-// Helpers
+import isEmpty from "../../../utils/isEmpty";
 import { filterByText } from "../../../utils/filterTable";
-
-// Settings
 import paginationSettings from "../../../settings/pagination.json";
 
-export default function TableGames({
-  filterText,
-  refetchFlag,
-  setRefetchFlag,
-}) {
+export default function TableGames({ filterText, refetchFlag, onRefetch }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
@@ -31,44 +23,41 @@ export default function TableGames({
   const offset = pageSize * currentPage - pageSize;
   const nextPage = offset + pageSize;
 
-  return (
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    <>
-      {isLoading ? (
-        <p>Loading data...</p>
-      ) : (
-        <>
-          <table className="w-full overflow-x-auto text-left text-base text-neutralLightest">
-            <RowHead activeTab="game" />
-            <tbody>
-              {filterByText(games, "name", filterText)
-                .slice(offset, nextPage)
-                .map((game) => (
-                  <RowGame
-                    key={game.id}
-                    game={game}
-                    refetchData={setRefetchFlag}
-                  />
-                ))}
-            </tbody>
-          </table>
+  const filteredGames = useMemo(
+    () => filterByText(games, "name", filterText),
+    [games, filterText]
+  );
 
-          <ConfigProvider theme={paginationSettings}>
-            <Pagination
-              pageSizeOptions={[5, 10, 20, 50, 100]}
-              className="py-2 text-center"
-              pageSize={pageSize}
-              current={currentPage}
-              total={games.length}
-              onChange={(pageClicked, onPageSize) => {
-                setCurrentPage(pageClicked);
-                setPageSize(onPageSize);
-              }}
-              showSizeChanger
-            />
-          </ConfigProvider>
-        </>
-      )}
+  if (isLoading) return <Loader fullHeight={false} />;
+
+  if (!isLoading && isEmpty(filteredGames))
+    return <p className="my-4 text-center">No game found!</p>;
+
+  return (
+    <>
+      <table className="w-full overflow-x-auto text-left text-base text-neutralLightest">
+        <RowHead activeTab="game" />
+        <tbody>
+          {filteredGames.slice(offset, nextPage).map((game) => (
+            <RowGame key={game.id} game={game} refetchData={onRefetch} />
+          ))}
+        </tbody>
+      </table>
+
+      <ConfigProvider theme={paginationSettings}>
+        <Pagination
+          pageSizeOptions={[5, 10, 20, 50, 100]}
+          className="py-2 text-center"
+          pageSize={pageSize}
+          current={currentPage}
+          total={filteredGames.length}
+          onChange={(pageClicked, onPageSize) => {
+            setCurrentPage(pageClicked);
+            setPageSize(onPageSize);
+          }}
+          showSizeChanger
+        />
+      </ConfigProvider>
     </>
   );
 }
@@ -76,5 +65,5 @@ export default function TableGames({
 TableGames.propTypes = {
   filterText: PropTypes.string.isRequired,
   refetchFlag: PropTypes.bool.isRequired,
-  setRefetchFlag: PropTypes.func.isRequired,
+  onRefetch: PropTypes.func.isRequired,
 };

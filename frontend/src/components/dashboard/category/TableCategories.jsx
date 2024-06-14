@@ -1,25 +1,21 @@
-// Packages
+import { useMemo, useState } from "react";
 import PropTypes from "prop-types";
-import { useState } from "react";
 import { Pagination, ConfigProvider } from "antd";
 
-// Components
 import RowHead from "../RowHead";
 import RowCategory from "./RowCategory";
+import Loader from "../../common/Loader";
 
-// Custom hooks
 import useAxios from "../../../hooks/useAxios";
 
-// Helpers
+import isEmpty from "../../../utils/isEmpty";
 import { filterByText } from "../../../utils/filterTable";
-
-// Settings
 import paginationSettings from "../../../settings/pagination.json";
 
 export default function TableCategories({
   filterText,
   refetchFlag,
-  setRefetchFlag,
+  onRefetch,
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
@@ -31,44 +27,45 @@ export default function TableCategories({
   const offset = pageSize * currentPage - pageSize;
   const nextPage = offset + pageSize;
 
-  return (
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    <>
-      {isLoading ? (
-        <p>Loading data...</p>
-      ) : (
-        <>
-          <table className="w-full overflow-x-auto text-left text-base text-neutralLightest">
-            <RowHead activeTab="category" />
-            <tbody>
-              {filterByText(categories, "name", filterText)
-                .slice(offset, nextPage)
-                .map((category) => (
-                  <RowCategory
-                    key={category.id}
-                    category={category}
-                    refetchData={setRefetchFlag}
-                  />
-                ))}
-            </tbody>
-          </table>
+  const filteredCategories = useMemo(
+    () => filterByText(categories, "name", filterText),
+    [categories, filterText]
+  );
 
-          <ConfigProvider theme={paginationSettings}>
-            <Pagination
-              pageSizeOptions={[5, 10, 20, 50, 100]}
-              className="py-2 text-center"
-              pageSize={pageSize}
-              current={currentPage}
-              total={categories.length}
-              onChange={(pageClicked, onPageSize) => {
-                setCurrentPage(pageClicked);
-                setPageSize(onPageSize);
-              }}
-              showSizeChanger
+  if (isLoading) return <Loader fullHeight={false} />;
+
+  if (!isLoading && isEmpty(filteredCategories))
+    return <p className="my-4 text-center">No category found!</p>;
+
+  return (
+    <>
+      <table className="w-full overflow-x-auto text-left text-base text-neutralLightest">
+        <RowHead activeTab="category" />
+        <tbody>
+          {filteredCategories.slice(offset, nextPage).map((category) => (
+            <RowCategory
+              key={category.id}
+              category={category}
+              refetchData={onRefetch}
             />
-          </ConfigProvider>
-        </>
-      )}
+          ))}
+        </tbody>
+      </table>
+
+      <ConfigProvider theme={paginationSettings}>
+        <Pagination
+          pageSizeOptions={[5, 10, 20, 50, 100]}
+          className="py-2 text-center"
+          pageSize={pageSize}
+          current={currentPage}
+          total={filteredCategories.length}
+          onChange={(pageClicked, onPageSize) => {
+            setCurrentPage(pageClicked);
+            setPageSize(onPageSize);
+          }}
+          showSizeChanger
+        />
+      </ConfigProvider>
     </>
   );
 }
@@ -76,5 +73,5 @@ export default function TableCategories({
 TableCategories.propTypes = {
   filterText: PropTypes.string.isRequired,
   refetchFlag: PropTypes.bool.isRequired,
-  setRefetchFlag: PropTypes.func.isRequired,
+  onRefetch: PropTypes.func.isRequired,
 };
