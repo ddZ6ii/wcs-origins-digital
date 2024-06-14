@@ -13,14 +13,8 @@ const initialAccount = {
   plan: null,
 };
 
-const initAccount = () => {
-  const user = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
-  if (user) return { ...initialAccount, id_user: user.id };
-  return initialAccount;
-};
-
 export default function authStore() {
-  const [account, setAccount] = useState(initAccount);
+  const [account, setAccount] = useState(initialAccount);
 
   const isAdmin = account.role === 1;
   const isLoggedIn = !isEmpty(account.id_user);
@@ -34,20 +28,29 @@ export default function authStore() {
     sessionStorage.removeItem(STORAGE_KEY);
   }, []);
 
+  const getuserInfo = async (userId) => {
+    try {
+      const { data: accountInfo } = await retrieveUserInfo(userId);
+      setAccount(accountInfo);
+    } catch (err) {
+      console.error(err);
+      // if cookie is removed, reset local storage info to automatically logout the user
+      if (err.response.status === 401) setAccount(initialAccount);
+    }
+  };
+
   // retrieve user info from backend using JWT stored in the cookie (in case of page refresh)
   useEffect(() => {
-    const getuserInfo = async () => {
-      const { data: accountInfo } = await retrieveUserInfo(account.id_user);
-      setAccount(accountInfo);
-    };
-    if (account.id_user) getuserInfo();
+    const user = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
+    if (!isEmpty(user)) getuserInfo(user.id);
   }, []);
 
   // store user id in session storage to retrieve user info
   useEffect(() => {
     const { id_user: userId } = account;
-    if (userId)
+    if (userId) {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ id: userId }));
+    }
   }, [account.id_user]);
 
   return {
