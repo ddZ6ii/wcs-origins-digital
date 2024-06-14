@@ -64,11 +64,13 @@ export const deleteVideoCategory = (id) =>
   });
 
 export const deleteVideoThumbnail = (data) =>
-  axios.delete(`${BASE_URL}/upload/thumbnails/videos`, data, {
+  axios.delete(`${BASE_URL}/upload/thumbnails/videos`, {
+    ...data,
     withCredentials: true,
   });
 
 export const deleteVideoFile = (data) =>
-  axios.delete(`${BASE_URL}/upload/videos`, data, {
+  axios.delete(`${BASE_URL}/upload/videos`, {
+    ...data,
     withCredentials: true,
   });
