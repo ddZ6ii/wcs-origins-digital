@@ -36,7 +36,7 @@ export default function VideoPlayer() {
   const [isOpen, setIsOpen] = useState(false);
 
   const { id } = useParams();
-  const { account } = useAuth();
+  const { account, isLoggedIn } = useAuth();
   const {
     data: [video],
     isLoading: isVideoLoading,
@@ -52,9 +52,17 @@ export default function VideoPlayer() {
       video_id: Number(id),
     };
     try {
-      if (isFav) await Favorites.deleteFav({ data });
-      else await Favorites.postFav(data);
-      setIsFav(!isFav);
+      if (isLoggedIn) {
+        // if (isFav) await Favorites.deleteFav({ data });
+        // else await Favorites.postFav(data);
+        await (isFav ? Favorites.deleteFav({ data }) : Favorites.postFav(data));
+        setIsFav(!isFav);
+      } else {
+        toast.warning(
+          `Please login to access this feature`,
+          TOAST_DEFAULT_CONFIG
+        );
+      }
     } catch (err) {
       console.error(err);
       toast.error(
@@ -62,6 +70,15 @@ export default function VideoPlayer() {
         TOAST_DEFAULT_CONFIG
       );
     }
+  };
+
+  const handleShare = () => {
+    if (isLoggedIn) setIsOpen((prev) => !prev);
+    else
+      toast.warning(
+        `Please login to access this feature`,
+        TOAST_DEFAULT_CONFIG
+      );
   };
 
   useEffect(() => {
@@ -100,7 +117,7 @@ export default function VideoPlayer() {
             </Button>
           )}
 
-          <Button type="button" onClick={() => setIsOpen((prev) => !prev)}>
+          <Button type="button" onClick={handleShare}>
             <img src={Share} alt="share button" />
           </Button>
 
