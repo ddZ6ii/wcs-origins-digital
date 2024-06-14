@@ -7,8 +7,6 @@ const checkForExistingLanguage = async (req, res, next) => {
 
     const [languages] = await models.language.findAll();
 
-    if (!languages.length) return res.status(404).send("No languages found");
-
     const match = languages.find(
       (language) => language.name.toLowerCase() === req.body.name.toLowerCase()
     );

@@ -34,11 +34,17 @@
   color: theme("colors.neutralLightest");
   background: theme("colors.primaryLight");
   transition: all ease-in-out;
+  outline: 3px solid transparent;
 }
 
 .btn_modal__style:hover {
   color: theme("colors.neutralLightest");
   background-color: theme("colors.primaryLightest");
+}
+
+.btn_modal__style:focus {
+  outline-color: theme(colors.blue.300);
+  outline-offset: 2px;
 }
 
 /* Start table label style  */

@@ -7,6 +7,20 @@ export const getVideos = () => {
   return axios.get(`${BASE_URL}/videos`, { signal: controller.signal });
 };
 
+export const getById = (videoId) => {
+  const controller = new AbortController();
+  return axios.get(
+    `${BASE_URL}/videos/${videoId}`,
+    { withCredentials: true },
+    { signal: controller.signal }
+  );
+};
+
+export const getCount = async (videoId) => {
+  const { data: videos } = await getById(videoId);
+  return videos.length;
+};
+
 export const getAllByLanguage = (languageId) => {
   const controller = new AbortController();
   return axios.get(
@@ -31,8 +45,22 @@ export const getAllByGame = (gameId) => {
 };
 
 export const getCountByGame = async (gameId) => {
-  const { data: games } = await getAllByGame(gameId);
-  return games.length;
+  const { data: videos } = await getAllByGame(gameId);
+  return videos.length;
+};
+
+export const getAllByCategory = (categoryId) => {
+  const controller = new AbortController();
+  return axios.get(
+    `${BASE_URL}/videos/categories/${categoryId}`,
+    { withCredentials: true },
+    { signal: controller.signal }
+  );
+};
+
+export const getCountByCategory = async (categoryId) => {
+  const { data: videos } = await getAllByCategory(categoryId);
+  return videos.length;
 };
 
 export const getFavoriteVideos = (userId) => {

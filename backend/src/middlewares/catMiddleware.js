@@ -7,8 +7,6 @@ const checkForExistingCategory = async (req, res, next) => {
 
     const [categories] = await models.category.findAll();
 
-    if (!categories.length) return res.status(404).send("No categories found");
-
     const match = categories.find(
       (category) => category.name.toLowerCase() === req.body.name.toLowerCase()
     );

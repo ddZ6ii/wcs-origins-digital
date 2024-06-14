@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Modal } from "antd";
 import PropTypes from "prop-types";
 
@@ -10,12 +11,23 @@ export default function ConfirmModal({
   onCancel,
   onConfirm,
 }) {
+  const cancelRef = useRef();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onConfirm();
   };
   return (
-    <Modal title={title} open={open} onCancel={onCancel} footer={null} centered>
+    <Modal
+      title={title}
+      open={open}
+      onCancel={onCancel}
+      footer={null}
+      centered
+      afterOpenChange={() => {
+        cancelRef.current.focus();
+      }}
+    >
       <form className="gap flex flex-col pt-2" onSubmit={handleSubmit}>
         {children}
         <p className="text-sm font-bold">This action cannot be undone!</p>
@@ -24,15 +36,16 @@ export default function ConfirmModal({
         <div className="flex justify-end gap-2">
           <button
             type="button"
+            ref={cancelRef}
             onClick={onCancel}
-            className={`${styles.btn_modal__style} text-neutralDark ring-1 ring-inset ring-neutral hover:bg-neutralDark hover:text-neutralLightest`}
+            className={`${styles.btn_modal__style} border-2 border-neutralDark text-neutralDark hover:bg-neutralDark hover:text-neutralLightest focus:bg-neutralDark focus:text-neutralLightest`}
           >
             Abort
           </button>
 
           <button
             type="submit"
-            className={`${styles.btn_modal__style} bg-err ml-2 flex w-fit items-center gap-2 border border-errorDark text-errorDark transition-all ease-in-out hover:bg-errorDark hover:text-neutralLightest`}
+            className={`${styles.btn_modal__style} bg-err ml-2 flex w-fit items-center gap-2 border-2 border-errorDark text-errorDark transition-all ease-in-out hover:bg-errorDark hover:text-neutralLightest focus:bg-errorDark focus:text-neutralLightest`}
           >
             ⚠️ Delete
           </button>
