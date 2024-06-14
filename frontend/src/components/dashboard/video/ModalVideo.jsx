@@ -1,16 +1,13 @@
-// Packages
-import PropTypes from "prop-types";
-import { Modal } from "antd";
 import { useRef, useState } from "react";
+import { Modal } from "antd";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-// Components
 import Button from "../../common/Button";
+import Dropdown from "../../common/Dropdown";
 import Input from "../../common/Input";
 import Label from "../../common/Label";
-import Dropdown from "../../common/Dropdown";
 
-// Hooks
 import useAxios from "../../../hooks/useAxios";
 
 // Helpers
@@ -23,20 +20,24 @@ import {
 import formatVideoBodyRequest from "../../../utils/formatVideoBodyRequest";
 import checkVideoFormCompleted from "../../../utils/checkVideoFormCompleted";
 
-// Services
-import {
-  addVideoThumbnail,
-  addVideoMedia,
-  addVideo,
-  addVideoCategory,
-} from "../../../services/videos";
+import * as Videos from "../../../services/videos";
 
-// Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
-// Styles
 import styles from "../Table.module.css";
 
+// video info based on form inputs
+const initialState = {
+  title: "",
+  game: {},
+  isPremium: false,
+  isPromoted: false,
+  language: {},
+  category: [],
+  description: "",
+  thumbnail: {},
+  video: {},
+};
 export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
   const inputRef = useRef(null);
   const imageRef = useRef(null);
@@ -46,18 +47,6 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
   const [isLangDropOpened, setIsLangDropOpened] = useState(false);
   const [isCatDropOpened, setIsCatDropOpened] = useState(false);
 
-  // video info based on form inputs
-  const initialState = {
-    title: "",
-    game: {},
-    isPremium: false,
-    isPromoted: false,
-    language: {},
-    category: [],
-    description: "",
-    thumbnail: {},
-    video: {},
-  };
   const [formVideoInfo, setFormVideoInfo] = useState(initialState);
 
   // fetch data from database to populate dropdown items
@@ -133,15 +122,15 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
         // upload video thumbnail to backend public folder
         const {
           data: { url_file: videoThumbUrl },
-        } = await addVideoThumbnail(thumbnailFormData);
+        } = await Videos.addThumbnail(thumbnailFormData);
 
         // upload video to backend public folder
         const {
           data: { url_file: videoUrl },
-        } = await addVideoMedia(videoFormData);
+        } = await Videos.addMedia(videoFormData);
 
         // add video entry to database
-        const responseVideo = await addVideo(
+        const responseVideo = await Videos.add(
           formatVideoBodyRequest(formVideoInfo, videoUrl, videoThumbUrl)
         );
 
@@ -150,7 +139,7 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
 
         formVideoInfo.category.forEach(async (category) => {
           try {
-            const response = await addVideoCategory({
+            const response = await Videos.addVideoCategory({
               video_id: responseVideo.data.insertId,
               category_id: category.id,
             });
@@ -168,11 +157,10 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
         setIsModalOpened(false);
       } catch (err) {
         console.error(err);
-        if (err.response?.status === 409) {
-          toast.error(`${err.response.data}`, TOAST_DEFAULT_CONFIG);
-        } else {
-          toast.error(`${err.response.statusText}!`, TOAST_DEFAULT_CONFIG);
-        }
+        const { response } = err;
+        const notification =
+          response.status === 409 ? response.data : response.statusText;
+        toast.error(notification, TOAST_DEFAULT_CONFIG);
       }
     }
   };
@@ -338,7 +326,7 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
           <Button
             type="button"
             onClick={handleCloseModal}
-            customCSS={`${styles.btn_modal__style} ring-1 ring-inset ring-neutral text-neutralDark`}
+            customCSS={`${styles.btn_modal__style} ring-1 ring-inset ring-neutral text-neutralDark hover:bg-neutralDark`}
           >
             Cancel
           </Button>

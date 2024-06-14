@@ -32,7 +32,8 @@
   padding: 0.25rem 1rem;
   border-radius: 0.5rem;
   color: theme("colors.neutralLightest");
-  background: theme("colors.primaryLightest");
+  background: theme("colors.primaryLight");
+  transition: all ease-in-out;
 }
 
 .btn_modal__style:hover {
