@@ -27,6 +27,7 @@ export default function RowGame({ game, refetchData }) {
       await deleteGameThumbnail({
         data: { thumbnail: game.thumbnail },
       });
+
       // ... then delete entry from database
       const res = await deleteGame(id);
       if (res?.status === 204)
