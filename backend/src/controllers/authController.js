@@ -8,14 +8,14 @@ const login = async (req, res) => {
 
     // user credentials have been verified by previous middleware (user is authenticated)_
     // create JWT info (token with expiration time)
-    const payload = { sub: req.user.id_user };
+    const payload = { sub: req.user.id_user, role: req.user.is_admin };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "2h",
     });
 
     if (!token) throw new Error("No authentication token returned");
 
-    // send back authentication token to the client and save it as a cookie
+    // send back authentication token to the client in a cookie, as well as user info to be stored in the context
     res.cookie("token", token, { httpOnly: true }).status(200).json(req.user);
   } catch (err) {
     console.error(err);

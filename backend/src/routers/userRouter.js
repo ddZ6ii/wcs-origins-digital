@@ -7,6 +7,7 @@ const {
   verifyEmail,
   checkForExistingAccount,
   hashPassword,
+  hasAdminRole,
 } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
@@ -28,12 +29,13 @@ router.use(verifyToken);
 
 router.put(
   "/:id",
+  hasAdminRole,
   validateUserInfo,
   verifyEmail,
   hashPassword,
   userController.editById
 );
 
-router.delete("/:id", userController.remove);
+router.delete("/:id", hasAdminRole, userController.remove);
 
 module.exports = router;

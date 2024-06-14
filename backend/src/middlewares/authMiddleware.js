@@ -70,6 +70,12 @@ const checkForExistingAccount = async (req, res, next) => {
   }
 };
 
+const hasAdminRole = (req, res, next) => {
+  const { role } = req.user;
+  if (role === 1) return next();
+  return res.status(401).send("Admin credentials required!");
+};
+
 const hashPassword = async (req, res, next) => {
   /**
    * OWSP minimum recommendations for argon2id:
@@ -105,4 +111,5 @@ module.exports = {
   verifyPassword,
   checkForExistingAccount,
   hashPassword,
+  hasAdminRole,
 };
