@@ -4,9 +4,6 @@ const isEmpty = require("../utils/isEmpty");
 
 const verifyEmail = async (req, res, next) => {
   try {
-    if (isEmpty(req.body))
-      return res.status(400).send("Bad request. Body cannot be empty...");
-
     const [[user]] = await models.user.findByEmail(req.body.email);
 
     if (!user)
@@ -15,6 +12,7 @@ const verifyEmail = async (req, res, next) => {
         .send(
           "No account found! Please verify your email address or make sure to sign up..."
         );
+
     req.user = user;
     return next();
   } catch (err) {
