@@ -1,12 +1,9 @@
-// Packages
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-// Style
-import styles from "../common/Slider.module.css";
-
-// Components
 import Card from "../common/Card";
+
+import styles from "../common/Slider.module.css";
 
 export default function SliderGame({ games }) {
   return (

@@ -1,13 +1,10 @@
-// Packages
 import { Carousel } from "antd";
 import { NavLink } from "react-router-dom";
 import { BsArrowRight } from "react-icons/bs";
 import { useState } from "react";
 
-// Components
 import Button from "../common/Button";
 
-// Data
 import displayedLinks from "../../data/heroImages.json";
 
 export default function Hero() {
