@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
-// Pages
+import Navbar from "./components/common/Navbar";
+import DashLayout from "./layout/DashLayout";
 import Home from "./pages/Home";
 import Videos from "./pages/Videos";
 import VideoPlayer from "./pages/VideoPlayer";
@@ -11,14 +12,7 @@ import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
 import User from "./pages/User";
 
-// Layout
-import DashLayout from "./layout/DashLayout";
-
-// Custom Hooks
 import useAuth from "./hooks/useAuth";
-
-// Components
-import Navbar from "./components/common/Navbar";
 
 export default function App() {
   const { isLoggedIn, isAdmin } = useAuth();
@@ -28,13 +22,17 @@ export default function App() {
       <Navbar />
       <main>
         <Routes>
+          {/* public routes */}
           <Route path="/" element={<Home />} />
           <Route path="videos" element={<Videos />} />
           <Route path="videos/:id" element={<VideoPlayer />} />
           <Route path="plans" element={<Pricing />} />
           <Route path="about" element={<About />} />
+          <Route path="account" element={<Connection />} />
           <Route path="*" element={<NotFound />} />
-          {isLoggedIn ? (
+
+          {/* private routes */}
+          {isLoggedIn && (
             <Route path="account" element={<DashLayout />}>
               {isAdmin ? (
                 <>
@@ -45,10 +43,6 @@ export default function App() {
               ) : (
                 <Route path="" element={<User dashboard />} />
               )}
-            </Route>
-          ) : (
-            <Route>
-              <Route path="account" element={<Connection />} />
             </Route>
           )}
         </Routes>
