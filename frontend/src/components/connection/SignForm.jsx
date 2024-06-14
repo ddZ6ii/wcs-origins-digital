@@ -57,7 +57,9 @@ export default function SignForm({ isSignIn }) {
       }
     } catch (err) {
       console.error(err);
-      const errorMessage = isSignIn ? err?.response?.data : err.message;
+      const errorMessage = isSignIn
+        ? err?.response?.data?.message
+        : err.message;
       toast.warn(`${errorMessage}`, TOAST_DEFAULT_CONFIG);
     }
   };

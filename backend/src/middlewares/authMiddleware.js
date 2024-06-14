@@ -6,11 +6,10 @@ const verifyEmail = async (req, res, next) => {
     const [[user]] = await models.user.findByEmail(req.body.email);
 
     if (!user)
-      return res
-        .status(404)
-        .send(
-          "No account found! Please verify your email address or make sure to sign up..."
-        );
+      return res.status(404).json({
+        message:
+          "No account found! Please verify your email address or make sure to sign up...",
+      });
 
     req.user = user;
     return next();
@@ -33,9 +32,9 @@ const verifyPassword = async (req, res, next) => {
 
     // authentication failded (password did not match)
     if (!isUserVerified)
-      return res
-        .status(401)
-        .send("Your email and password do not match. Please try again.");
+      return res.status(401).json({
+        message: "Your email and password do not match. Please try again.",
+      });
 
     return next();
   } catch (err) {
