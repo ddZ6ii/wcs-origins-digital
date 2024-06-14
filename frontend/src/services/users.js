@@ -29,3 +29,9 @@ export const register = (userInfo) => {
     withCredentials: true,
   });
 };
+
+export const retrieveUserInfo = (userId) => {
+  return axios.get(`${BASE_URL}/users/${userId}`, {
+    withCredentials: true,
+  });
+};

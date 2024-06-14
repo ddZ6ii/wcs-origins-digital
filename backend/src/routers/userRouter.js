@@ -12,9 +12,9 @@ const {
 
 const router = express.Router();
 
-router.get("/", userController.getAll);
+// router.get("/", userController.getAll);
 router.get("/stats/:id", userController.getAllStats);
-router.get("/:id", userController.getById);
+// router.get("/:id", userController.getById);
 
 router.post(
   "/",
@@ -26,6 +26,9 @@ router.post(
 
 // authentication wall : verifyToken is activated for each route after this line
 router.use(verifyToken);
+
+router.get("/", userController.getAll);
+router.get("/:id", userController.getById);
 
 router.put(
   "/:id",

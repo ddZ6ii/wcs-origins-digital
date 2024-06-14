@@ -15,8 +15,14 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const [[user]] = await models.user.find(req.params.id);
+    const { sub: userId } = req.user;
+
+    const [[user]] = await models.user.findById(userId);
     if (!user) return res.status(404).send("User not found");
+
+    // remove sensitive info
+    delete user.password;
+
     return res.json(user);
   } catch (err) {
     console.error(err);
@@ -92,4 +98,11 @@ const getAllStats = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getById, create, editById, remove, getAllStats };
+module.exports = {
+  getAll,
+  getById,
+  create,
+  editById,
+  remove,
+  getAllStats,
+};
