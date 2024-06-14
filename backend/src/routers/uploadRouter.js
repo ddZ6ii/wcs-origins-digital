@@ -37,7 +37,7 @@ router.post(
   uploadController.post
 );
 
-router.delete("/thumbnails/videos", uploadController.remove);
+router.delete("/thumbnails/videos", hasAdminRole, uploadController.remove);
 
 router.post(
   "/videos",

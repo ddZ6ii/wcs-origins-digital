@@ -42,8 +42,10 @@ export default function RowVideo({ video, refetchData }) {
       await deleteVideoFile({
         data: { url_video: video.url_video },
       });
+
       // ... then delete entry from database
       const res = await deleteVideo(id);
+
       if (res?.status === 204)
         toast.success("Video successfully deleted!", TOAST_DEFAULT_CONFIG);
       refetchData((prev) => !prev);
