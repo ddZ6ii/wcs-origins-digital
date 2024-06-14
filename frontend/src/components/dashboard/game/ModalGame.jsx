@@ -12,13 +12,13 @@ import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 import styles from "../Table.module.css";
 
-export default function ModalGame({ open, setIsModalOpened, refetchData }) {
+export default function ModalGame({ isOpened, openModal, refetchData }) {
   const inputRef = useRef();
   const fileRef = useRef();
 
   const handleClose = () => {
     inputRef.current.value = "";
-    setIsModalOpened(false);
+    openModal(false);
   };
 
   const handleSubmit = async (e) => {
@@ -43,7 +43,7 @@ export default function ModalGame({ open, setIsModalOpened, refetchData }) {
       inputRef.current.value = "";
       fileRef.current.value = "";
       // close modal
-      setIsModalOpened(false);
+      openModal(false);
       // raise flag to refetch data from DB and update table view
       refetchData((prev) => !prev);
     } catch (err) {
@@ -58,7 +58,7 @@ export default function ModalGame({ open, setIsModalOpened, refetchData }) {
   return (
     <Modal
       centered
-      open={open}
+      open={isOpened}
       title="Add a new game"
       onCancel={handleClose}
       onOk={handleSubmit}
@@ -112,13 +112,13 @@ export default function ModalGame({ open, setIsModalOpened, refetchData }) {
 }
 
 ModalGame.propTypes = {
-  open: PropTypes.bool,
-  setIsModalOpened: PropTypes.func,
+  isOpened: PropTypes.bool,
+  openModal: PropTypes.func,
   refetchData: PropTypes.func,
 };
 
 ModalGame.defaultProps = {
-  open: null,
-  setIsModalOpened: null,
+  isOpened: null,
+  openModal: null,
   refetchData: null,
 };

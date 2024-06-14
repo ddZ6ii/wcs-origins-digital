@@ -12,10 +12,10 @@ import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 import styles from "../Table.module.css";
 
-export default function ModalLanguage({ open, setIsModalOpened, refetchData }) {
+export default function ModalLanguage({ isOpened, openModal, refetchData }) {
   const inputRef = useRef();
 
-  const handleClose = () => setIsModalOpened(false);
+  const handleClose = () => openModal(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ export default function ModalLanguage({ open, setIsModalOpened, refetchData }) {
       if (response?.status === 201) {
         toast.success("Language successfully added!", TOAST_DEFAULT_CONFIG);
         refetchData((prev) => !prev);
-        setIsModalOpened(false);
+        openModal(false);
       }
     } catch (err) {
       console.error(err);
@@ -40,7 +40,7 @@ export default function ModalLanguage({ open, setIsModalOpened, refetchData }) {
   return (
     <Modal
       centered
-      open={open}
+      open={isOpened}
       title="Add a new language"
       onCancel={handleClose}
       onOk={handleSubmit}
@@ -82,13 +82,13 @@ export default function ModalLanguage({ open, setIsModalOpened, refetchData }) {
 }
 
 ModalLanguage.propTypes = {
-  open: PropTypes.bool,
-  setIsModalOpened: PropTypes.func,
+  isOpened: PropTypes.bool,
+  openModal: PropTypes.func,
   refetchData: PropTypes.func,
 };
 
 ModalLanguage.defaultProps = {
-  open: null,
-  setIsModalOpened: null,
+  isOpened: null,
+  openModal: null,
   refetchData: null,
 };
