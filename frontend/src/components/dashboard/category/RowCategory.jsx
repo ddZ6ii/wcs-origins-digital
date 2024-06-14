@@ -21,21 +21,20 @@ export default function RowCategory({ category, refetchData }) {
 
   const toggleDropdown = () => setIsToggled(!isToggled);
 
-  const handleDeleteCategory = (id) => {
-    deleteCategory(id)
-      .then((res) => {
-        if (res?.status === 204)
-          toast.success("Category successfully deleted!", TOAST_DEFAULT_CONFIG);
+  const handleDeleteCategory = async (id) => {
+    try {
+      const response = await deleteCategory(id);
+      if (response?.status === 204) {
+        toast.success("Category successfully deleted!", TOAST_DEFAULT_CONFIG);
         refetchData((prev) => !prev);
-      })
-      .catch((err) => {
-        console.error(err);
-        if (err.response.status === 404) {
-          toast.error(`${err.response.data}`, TOAST_DEFAULT_CONFIG);
-        } else {
-          toast.error(`${err.response.statusText}!`, TOAST_DEFAULT_CONFIG);
-        }
-      });
+      }
+    } catch (err) {
+      console.error(err);
+      const { response } = err;
+      const notification =
+        response.status === 404 ? response.data : response.statusText;
+      toast.error(notification, TOAST_DEFAULT_CONFIG);
+    }
   };
 
   return (
