@@ -1,5 +1,5 @@
 const models = require("../models");
-const handleGameQuery = require("../services/handleGameQuery");
+const handleGameQuery = require("../utils/handleGameQuery");
 
 const getAll = async (req, res) => {
   try {

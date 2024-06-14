@@ -1,5 +1,5 @@
 const models = require("../models");
-const handleVideoQuery = require("../services/handleVideoQuery");
+const handleVideoQuery = require("../utils/handleVideoQuery");
 
 const getAllWithFilters = async (req, res) => {
   // hard-coded treshold to consider videos as popular
