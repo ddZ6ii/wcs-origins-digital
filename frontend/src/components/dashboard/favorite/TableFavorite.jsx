@@ -9,11 +9,11 @@ import RowHead from "../RowHead";
 import RowFavorite from "./RowFavorite";
 
 // Helpers
-import { filterByText } from "../../../helpers/filterTable";
+import { filterByText } from "../../../utils/filterTable";
 
 // Hook
 import useAxios from "../../../hooks/useAxios";
-import useUserContext from "../../../hooks/useUserContext";
+import useAuth from "../../../hooks/useAuth";
 
 // Settings
 import paginationSettings from "../../../settings/pagination.json";
@@ -27,7 +27,7 @@ export default function TableFavorite({
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
-  const { account } = useUserContext();
+  const { account } = useAuth();
   const { data: favoriteVideos } = useAxios(
     `/user-video/${account.id_user}`,
     flagVideos

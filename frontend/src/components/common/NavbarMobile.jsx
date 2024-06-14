@@ -4,43 +4,44 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 // Custom Hooks
-import useUserContext from "../../hooks/useUserContext";
 import useAuth from "../../hooks/useAuth";
 
 // Components
 import MenuOpen from "../navbar/MenuOpen";
 import MenuClose from "../navbar/MenuClose";
 import LogOut from "../navbar/LogOut";
+import Logo from "../../assets/icon/navbar/mobile/logo_mobile.svg";
+
+// services
+import * as User from "../../services/users";
 
 // Style
-import styles from "../../css/Navbar.module.css";
+import styles from "./Navbar.module.css";
 
 export default function NavbarMobile({ navitems }) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const { setAccount } = useUserContext();
-  const { clearUserFromLocalStorage, logoutUser } = useAuth();
+  const { resetAccount } = useAuth();
 
   const toggleNavMenu = () => setIsOpen(!isOpen);
-  const handleLogOut = async () => {
-    toggleNavMenu(); // close burger menu
-    await logoutUser(); // request logout
-    setAccount({
-      id_plan: undefined, // update context
-    });
-    clearUserFromLocalStorage();
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      // close burger menu
+      toggleNavMenu();
+      // logout user
+      await User.logout();
+    } catch (error) {
+      console.error("An error occured during logout...");
+    } finally {
+      resetAccount();
+      navigate("/");
+    }
   };
 
   return (
     <nav className={`${styles.navbar} ${styles.navbarMobile}`}>
       <NavLink to="/" className={styles.navbarMobile__logo}>
-        <img
-          src="../assets/icon/navbar/mobile/logo_mobile.svg"
-          alt="logo origins-digital"
-          width="48"
-          height="48"
-        />
+        <img src={Logo} alt="logo origins-digital" width="48" height="48" />
       </NavLink>
 
       <ul
@@ -70,7 +71,7 @@ export default function NavbarMobile({ navitems }) {
               <NavLink to="/">
                 <LogOut
                   customCSS={`${styles.navbarMobile__navitem} ${styles.navitem__logout}`}
-                  onClick={handleLogOut}
+                  onClick={handleLogout}
                 />
               </NavLink>
             </li>

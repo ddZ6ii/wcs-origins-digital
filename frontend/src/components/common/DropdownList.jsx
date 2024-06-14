@@ -2,8 +2,8 @@
 import PropTypes from "prop-types";
 
 // Helpers
-import capitalizeText from "../../helpers/capitalize";
-import { filterByText } from "../../helpers/filterTable";
+import capitalizeText from "../../utils/capitalize";
+import { filterByText } from "../../utils/filterTable";
 
 export default function DropdownList({
   items,

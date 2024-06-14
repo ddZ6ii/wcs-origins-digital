@@ -4,16 +4,16 @@ import { useState, useEffect } from "react";
 // Components
 import Hero from "../components/home/Hero";
 import SliderGame from "../components/home/SliderGame";
-import SliderVideo from "../components/utilities/SliderVideo";
+import SliderVideo from "../components/common/SliderVideo";
 import Partners from "../components/home/Partners";
-import Footer from "../components/utilities/Footer";
-import Loader from "../components/utilities/Loader";
+import Footer from "../components/common/Footer";
+import Loader from "../components/common/Loader";
 
 // Services
-import * as Services from "../services/Account.service";
+import * as Services from "../services/account";
 
 // Style
-import styles from "../css/Slider.module.css";
+import styles from "../components/common/Slider.module.css";
 
 export default function Home() {
   const [games, setGames] = useState([]);

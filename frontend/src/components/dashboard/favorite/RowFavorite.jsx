@@ -4,16 +4,16 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 // Components
-import Button from "../../utilities/Button";
+import Button from "../../common/Button";
 
 // Services
-import * as Services from "../../../services/Favs.service";
+import * as Services from "../../../services/favorites";
 
 // Settings
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 // Helpers
-import capitalizeText from "../../../helpers/capitalize";
+import capitalizeText from "../../../utils/capitalize";
 
 export default function RowFavorite({ video, setFlagVideos, userId }) {
   const navigate = useNavigate();

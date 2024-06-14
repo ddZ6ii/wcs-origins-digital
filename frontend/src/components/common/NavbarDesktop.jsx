@@ -2,18 +2,17 @@
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 
+// Components
+import Logo from "../../assets/icon/navbar/logo_desktop.svg";
+
 // Style
-import styles from "../../css/Navbar.module.css";
+import styles from "./Navbar.module.css";
 
 export default function NavBarDesktop({ navitems }) {
   return (
     <nav className={`${styles.navbar} ${styles.navbarDesktop}`}>
       <NavLink to="/">
-        <img
-          src="../assets/icon/navbar/logo_desktop.svg"
-          alt="logo origins-digital"
-          height="48"
-        />
+        <img src={Logo} alt="logo origins-digital" height="48" />
       </NavLink>
 
       <div className={styles.inline__list}>

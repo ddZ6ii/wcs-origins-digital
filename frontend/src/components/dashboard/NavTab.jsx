@@ -3,7 +3,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 // Style
-import styles from "../../css/Table.module.css";
+import styles from "./Table.module.css";
 
 export default function NavTab({ setActiveTabItem }) {
   const [activeTab, setActiveTab] = useState("video");

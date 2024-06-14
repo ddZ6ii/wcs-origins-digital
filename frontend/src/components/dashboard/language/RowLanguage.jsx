@@ -5,10 +5,10 @@ import { toast } from "react-toastify";
 
 // Components
 import LanguageDropdown from "./LanguageDropdown";
-import Button from "../../utilities/Button";
+import Button from "../../common/Button";
 
 // Helpers
-import capitalizeText from "../../../helpers/capitalize";
+import capitalizeText from "../../../utils/capitalize";
 
 // Services
 import { deleteLanguage } from "../../../services/languages";

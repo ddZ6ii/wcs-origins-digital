@@ -9,7 +9,7 @@ import Searchbar from "./Searchbar";
 import DropdownList from "./DropdownList";
 
 // Helpers
-import getSelectionName from "../../helpers/getSelectionName";
+import getSelectionName from "../../utils/getSelectionName";
 
 export default function Dropdown({
   name = "",

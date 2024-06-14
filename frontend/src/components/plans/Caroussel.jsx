@@ -6,14 +6,14 @@ import { toast } from "react-toastify";
 
 // Style
 import "swiper/swiper-bundle.min.css";
-import styles from "../../css/Slider.module.css";
+import styles from "../common/Slider.module.css";
 import "react-toastify/dist/ReactToastify.css";
 
 // Components
-import Card from "../utilities/Card";
+import Card from "../common/Card";
 
 // Helpers
-import capitalize from "../../helpers/capitalize";
+import capitalize from "../../utils/capitalize";
 
 // Settings
 import TOAST_DEFAULT_CONFIG from "../../settings/toastify.json";
@@ -82,7 +82,7 @@ export default function Caroussel({ plans, billing }) {
                       .map((perk) => (
                         <li key={perk} className={styles.card__plan__perk}>
                           <img
-                            src="../assets/icon/utility/tick.svg"
+                            src="./src/assets/icon/utility/tick.svg"
                             alt={perk}
                             className={styles.card__plan__bullet}
                           />

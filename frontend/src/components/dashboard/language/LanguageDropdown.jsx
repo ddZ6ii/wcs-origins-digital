@@ -4,8 +4,8 @@ import { useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 
 // Components
-import Button from "../../utilities/Button";
-import Input from "../../utilities/Input";
+import Button from "../../common/Button";
+import Input from "../../common/Input";
 
 // Services
 import { modifyLanguageById } from "../../../services/languages";
@@ -14,7 +14,7 @@ import { modifyLanguageById } from "../../../services/languages";
 import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 // Style
-import styles from "../../../css/Table.module.css";
+import styles from "../Table.module.css";
 
 export default function LanguageDropdown({
   language,

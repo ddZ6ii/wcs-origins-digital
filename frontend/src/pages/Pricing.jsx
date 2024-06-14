@@ -5,7 +5,7 @@ import useAxios from "../hooks/useAxios";
 // Components
 import SwitchBilling from "../components/plans/SwitchBilling";
 import Caroussel from "../components/plans/Caroussel";
-import Footer from "../components/utilities/Footer";
+import Footer from "../components/common/Footer";
 
 export default function Pricing() {
   const [currentBilling, setCurrentBilling] = useState("Monthly");

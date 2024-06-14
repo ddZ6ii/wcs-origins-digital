@@ -3,24 +3,24 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 // Helpers
-import { filterVideos } from "../helpers/filterTable";
+import { filterVideos } from "../utils/filterTable";
 
 // Hooks
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
 
 // Components
-import Dropdown from "../components/utilities/Dropdown";
-import Searchbar from "../components/utilities/Searchbar";
-import Label from "../components/utilities/Label";
-import Button from "../components/utilities/Button";
-import SliderVideo from "../components/utilities/SliderVideo";
-import Footer from "../components/utilities/Footer";
-import Loader from "../components/utilities/Loader";
+import Dropdown from "../components/common/Dropdown";
+import Searchbar from "../components/common/Searchbar";
+import Label from "../components/common/Label";
+import Button from "../components/common/Button";
+import SliderVideo from "../components/common/SliderVideo";
+import Footer from "../components/common/Footer";
+import Loader from "../components/common/Loader";
 
 // Styles
-import styles from "../css/Slider.module.css";
-import stylesSearch from "../css/Table.module.css";
+import styles from "../components/common/Slider.module.css";
+import stylesSearch from "../components/dashboard/Table.module.css";
 
 export default function Videos() {
   const {
@@ -197,7 +197,7 @@ export default function Videos() {
                 onClick={loadMore}
               >
                 <img
-                  src="../assets/icon/utility/showMore.svg"
+                  src="./src/assets/icon/utility/showMore.svg"
                   alt="show more"
                 />
                 Load More
@@ -226,7 +226,7 @@ export default function Videos() {
                   onClick={loadMore}
                 >
                   <img
-                    src="../assets/icon/utility/showMore.svg"
+                    src="./src/assets/icon/utility/showMore.svg"
                     alt="show more"
                   />
                   Load More

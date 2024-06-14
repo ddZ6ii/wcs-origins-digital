@@ -1,8 +1,8 @@
 // Style
-import styles from "../../css/Slider.module.css";
+import styles from "../common/Slider.module.css";
 
 // Components
-import Slider from "../utilities/Slider";
+import Slider from "../common/Slider";
 
 // Data
 import partners from "../../data/partners.json";

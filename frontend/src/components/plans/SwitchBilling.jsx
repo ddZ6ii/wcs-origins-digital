@@ -2,7 +2,7 @@
 import PropTypes from "prop-types";
 
 // Style
-import styles from "../../css/SwitchBilling.module.css";
+import styles from "./SwitchBilling.module.css";
 
 function SwitchBilling({ currentBilling, onChangeBilling }) {
   const labels = ["Monthly", "Yearly"];

@@ -14,17 +14,20 @@ import {
 } from "react-share";
 
 // Component
-import Player from "../components/video/Player";
-import Label from "../components/utilities/Label";
-import Button from "../components/utilities/Button";
-import Loader from "../components/utilities/Loader";
+import Player from "../components/player/Player";
+import Label from "../components/common/Label";
+import Button from "../components/common/Button";
+import Loader from "../components/common/Loader";
+import Share from "../assets/icon/utility/share.svg";
+import Like from "../assets/icon/utility/like.svg";
+import Liked from "../assets/icon/utility/like_red.svg";
 
 // Custom hooks
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
 
 // Services
-import * as Services from "../services/Favs.service";
+import * as Services from "../services/favorites";
 
 // Settings
 import TOAST_DEFAULT_CONFIG from "../settings/toastify.json";
@@ -96,24 +99,11 @@ export default function VideoPlayer() {
             <div className="flex items-center gap-4 md:gap-6">
               {account.id_user !== undefined && (
                 <Button type="button" onClick={() => handleClickOnFavorite()}>
-                  {isFav ? (
-                    <img
-                      src="../assets/icon/utility/like_red.svg"
-                      alt="like_red button"
-                    />
-                  ) : (
-                    <img
-                      src="../assets/icon/utility/like.svg"
-                      alt="like button"
-                    />
-                  )}
+                  <img src={isFav ? Liked : Like} alt="like_red button" />
                 </Button>
               )}
               <Button type="button" onClick={() => setIsToggled(!isToggled)}>
-                <img
-                  src="../assets/icon/utility/share.svg"
-                  alt="share button"
-                />
+                <img src={Share} alt="share button" />
               </Button>
               {isToggled && (
                 <div className="absolute z-10 mb-56 ml-8 rounded-lg bg-neutralLightest">

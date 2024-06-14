@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState, forwardRef } from "react";
 
 // Styles
-import styles from "../../css/Table.module.css";
+import styles from "../dashboard/Table.module.css";
 
 const Input = forwardRef(function forwardRefToChild(
   {

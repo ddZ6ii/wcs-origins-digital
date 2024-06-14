@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 // Style
-import styles from "../../css/Slider.module.css";
+import styles from "../common/Slider.module.css";
 
 // Components
-import Card from "../utilities/Card";
+import Card from "../common/Card";
 
 export default function SliderGame({ games }) {
   return (
