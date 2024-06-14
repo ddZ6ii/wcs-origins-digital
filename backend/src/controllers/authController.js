@@ -10,13 +10,13 @@ const login = async (req, res) => {
     // create JWT info (token with expiration time)
     const payload = { sub: req.user.id_user };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "24h",
+      expiresIn: "2h",
     });
 
     if (!token) throw new Error("No authentication token returned");
 
     // send back authentication token to the client and save it as a cookie
-    res.cookie("appjwt", token, { httpOnly: true }).status(200).json(req.user);
+    res.cookie("token", token, { httpOnly: true }).status(200).json(req.user);
   } catch (err) {
     console.error(err);
     res
@@ -27,7 +27,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    res.clearCookie("appjwt").status(200).json({ message: "user logged out" });
+    res.clearCookie("token").status(200).json({ message: "user logged out" });
   } catch (err) {
     console.error(err);
     res.status(500).send("oops...an error occured when loggin out the user");
