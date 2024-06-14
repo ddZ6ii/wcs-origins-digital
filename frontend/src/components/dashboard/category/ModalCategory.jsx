@@ -15,31 +15,26 @@ import styles from "../Table.module.css";
 export default function ModalCategory({ open, setIsModalOpened, refetchData }) {
   const inputRef = useRef();
 
-  const handleClose = () => {
-    inputRef.current.value = "";
-    setIsModalOpened(false);
-  };
+  const handleClose = () => setIsModalOpened(false);
 
-  const handleSubmit = (e) => {
-    const name = inputRef.current.value.trim().toLowerCase();
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    Categories.add({ name })
-      .then((res) => {
-        if (res?.status === 201)
-          toast.success("Category successfully added!", TOAST_DEFAULT_CONFIG);
+    try {
+      const name = inputRef.current.value.trim().toLowerCase();
+      const response = await Categories.add({ name });
+      if (response?.status === 201) {
+        toast.success("Category successfully added!", TOAST_DEFAULT_CONFIG);
+
         refetchData((prev) => !prev);
-        // reset input
-        inputRef.current.value = "";
         setIsModalOpened(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        if (err.response.status === 409) {
-          toast.error(`${err.response.data}`, TOAST_DEFAULT_CONFIG);
-        } else {
-          toast.error(`${err.response.statusText}!`, TOAST_DEFAULT_CONFIG);
-        }
-      });
+      }
+    } catch (err) {
+      console.error(err);
+      const { response } = err;
+      const notification =
+        response.status === 409 ? response.data : response.statusText;
+      toast.error(notification, TOAST_DEFAULT_CONFIG);
+    }
   };
 
   return (
@@ -69,7 +64,7 @@ export default function ModalCategory({ open, setIsModalOpened, refetchData }) {
           <Button
             type="button"
             onClick={handleClose}
-            customCSS={`${styles.btn_modal__style} ring-1 ring-inset ring-neutral text-neutralDark`}
+            customCSS={`${styles.btn_modal__style} ring-1 ring-inset ring-neutral text-neutralDark hover:bg-neutralDark`}
           >
             Cancel
           </Button>

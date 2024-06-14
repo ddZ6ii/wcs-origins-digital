@@ -26,6 +26,18 @@ import TOAST_DEFAULT_CONFIG from "../../../settings/toastify.json";
 
 import styles from "../Table.module.css";
 
+// video info based on form inputs
+const initialState = {
+  title: "",
+  game: {},
+  isPremium: false,
+  isPromoted: false,
+  language: {},
+  category: [],
+  description: "",
+  thumbnail: {},
+  video: {},
+};
 export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
   const inputRef = useRef(null);
   const imageRef = useRef(null);
@@ -35,18 +47,6 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
   const [isLangDropOpened, setIsLangDropOpened] = useState(false);
   const [isCatDropOpened, setIsCatDropOpened] = useState(false);
 
-  // video info based on form inputs
-  const initialState = {
-    title: "",
-    game: {},
-    isPremium: false,
-    isPromoted: false,
-    language: {},
-    category: [],
-    description: "",
-    thumbnail: {},
-    video: {},
-  };
   const [formVideoInfo, setFormVideoInfo] = useState(initialState);
 
   // fetch data from database to populate dropdown items
@@ -157,11 +157,10 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
         setIsModalOpened(false);
       } catch (err) {
         console.error(err);
-        if (err.response?.status === 409) {
-          toast.error(`${err.response.data}`, TOAST_DEFAULT_CONFIG);
-        } else {
-          toast.error(`${err.response.statusText}!`, TOAST_DEFAULT_CONFIG);
-        }
+        const { response } = err;
+        const notification =
+          response.status === 409 ? response.data : response.statusText;
+        toast.error(notification, TOAST_DEFAULT_CONFIG);
       }
     }
   };
@@ -327,7 +326,7 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
           <Button
             type="button"
             onClick={handleCloseModal}
-            customCSS={`${styles.btn_modal__style} ring-1 ring-inset ring-neutral text-neutralDark`}
+            customCSS={`${styles.btn_modal__style} ring-1 ring-inset ring-neutral text-neutralDark hover:bg-neutralDark`}
           >
             Cancel
           </Button>
