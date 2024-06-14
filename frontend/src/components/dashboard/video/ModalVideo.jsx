@@ -38,7 +38,7 @@ const initialState = {
   thumbnail: {},
   video: {},
 };
-export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
+export default function ModalVideo({ isOpened, openModal, refetchData }) {
   const inputRef = useRef(null);
   const imageRef = useRef(null);
   const videoRef = useRef(null);
@@ -99,7 +99,7 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
     setIsLangDropOpened(false);
     setIsCatDropOpened(false);
     // close modal
-    setIsModalOpened(false);
+    openModal(false);
   };
 
   const handleSubmit = async (e) => {
@@ -154,7 +154,7 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
 
         setFormVideoInfo(initialState);
         refetchData((prev) => !prev);
-        setIsModalOpened(false);
+        openModal(false);
       } catch (err) {
         console.error(err);
         const { response } = err;
@@ -177,7 +177,7 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
   return (
     <Modal
       centered
-      open={open}
+      open={isOpened}
       title="Add a new video"
       onCancel={handleCloseModal}
       onOk={handleSubmit}
@@ -186,11 +186,7 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
         inputRef.current.focus();
       }}
     >
-      <form
-        onSubmit={handleSubmit}
-        encType="multipart/form-data"
-        className="flex flex-col gap-4"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-4">
           <Input
             htmlFor="title"
@@ -344,13 +340,13 @@ export default function ModalVideo({ open, setIsModalOpened, refetchData }) {
 }
 
 ModalVideo.propTypes = {
-  open: PropTypes.bool,
-  setIsModalOpened: PropTypes.func,
+  isOpened: PropTypes.bool,
+  openModal: PropTypes.func,
   refetchData: PropTypes.func,
 };
 
 ModalVideo.defaultProps = {
-  open: null,
-  setIsModalOpened: null,
+  isOpened: null,
+  openModal: null,
   refetchData: null,
 };

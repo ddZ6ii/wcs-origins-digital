@@ -20,6 +20,8 @@ export default function RowSearch({
 }) {
   const [isModalOpened, setIsModalOpened] = useState(false);
 
+  const handleOpenModal = (bool) => setIsModalOpened(bool);
+
   const addButton = () => {
     if (activeTab === "video") {
       return "New Video";
@@ -46,8 +48,8 @@ export default function RowSearch({
     if (activeTab === "video") {
       return (
         <ModalVideo
-          open={isModalOpened}
-          setIsModalOpened={setIsModalOpened}
+          isOpened={isModalOpened}
+          openModal={handleOpenModal}
           refetchData={onRefetchVideos}
         />
       );
@@ -55,8 +57,8 @@ export default function RowSearch({
     if (activeTab === "category") {
       return (
         <ModalCategory
-          open={isModalOpened}
-          setIsModalOpened={setIsModalOpened}
+          isOpened={isModalOpened}
+          openModal={handleOpenModal}
           refetchData={onRefetchCategories}
         />
       );
@@ -64,17 +66,17 @@ export default function RowSearch({
     if (activeTab === "language") {
       return (
         <ModalLanguage
-          open={isModalOpened}
+          isOpened={isModalOpened}
+          openModal={handleOpenModal}
           refetchData={onRefetchLanguages}
-          setIsModalOpened={setIsModalOpened}
         />
       );
     }
     if (activeTab === "game") {
       return (
         <ModalGame
-          open={isModalOpened}
-          setIsModalOpened={setIsModalOpened}
+          isOpened={isModalOpened}
+          openModal={handleOpenModal}
           refetchData={onRefetchGames}
         />
       );
