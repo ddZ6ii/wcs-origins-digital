@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const { v4: uuidv4 } = require("uuid");
+const { isProduction } = require("../database/config");
 
-const isProduction = process.env.NODE_ENV === "production";
 const FRONT_DEST = isProduction
   ? "https://origins-e-sport-backend.remote-fr-2.wilders.dev/"
   : `http://localhost:${process.env.APP_PORT}/`;
