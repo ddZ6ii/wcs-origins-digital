@@ -1,21 +1,29 @@
-require("dotenv").config();
-
 const mysql = require("mysql2/promise");
+const dotenv = require("dotenv");
 
-// create a connection pool to the database
+// Set proper environment variables for all backend files.
+dotenv.config({ path: `.env.${process.env.NODE_ENV ?? "development"}` });
 
+const isProduction = process.env.NODE_ENV === "production";
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
-const pool = mysql.createPool({
-  host: DB_HOST,
-  port: DB_PORT,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_NAME,
-});
+// Database connection string for production (Railway env. variables).
+const PROD_DB_URL = `mysql://${process.env.MYSQLUSER}:${process.env.MYSQLPASSWORD}@${process.env.MYSQLHOST}:${process.env.MYSQLPORT}/${process.env.MYSQLDATABASE}`;
+
+const connectionConfig = isProduction
+  ? PROD_DB_URL
+  : {
+      host: DB_HOST,
+      port: DB_PORT,
+      user: DB_USER,
+      password: DB_PASSWORD,
+      database: DB_NAME,
+    };
+
+// create a connection pool to the database
+const pool = mysql.createPool(connectionConfig);
 
 // try a connection
-
 pool.getConnection().catch(() => {
   console.warn(
     "Warning:",

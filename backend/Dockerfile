@@ -14,7 +14,7 @@ ENV DB_NAME=${DB_NAME}
 ARG JWT_SECRET=${JWT_SECRET}
 ENV JWT_SECRET=${JWT_SECRET}
 
-COPY ./backend .
+COPY . .
 
 RUN npm install
 

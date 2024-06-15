@@ -1,13 +1,10 @@
 const fs = require("node:fs");
 const { v4: uuidv4 } = require("uuid");
-require("dotenv").config();
 
-let FRONT_DEST;
-// production
-if (process.env.FRONTEND_URL.includes("origins-e-sport"))
-  FRONT_DEST = "https://origins-e-sport-backend.remote-fr-2.wilders.dev/";
-// test local
-else FRONT_DEST = `http://localhost:${process.env.APP_PORT}/`;
+const isProduction = process.env.NODE_ENV === "production";
+const FRONT_DEST = isProduction
+  ? "https://origins-e-sport-backend.remote-fr-2.wilders.dev/"
+  : `http://localhost:${process.env.APP_PORT}/`;
 
 const post = (req, res) => {
   // extract file destination (backend location)

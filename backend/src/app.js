@@ -3,16 +3,13 @@ const path = require("node:path");
 const cors = require("cors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
-
 const mainRouter = require("./routers/mainRouter");
 
-// create express app
 const app = express();
 
-// use some application-level middlewares
+// Application-level middlewares.
 app.use(express.json());
 app.use(cookieParser());
-
 app.use(
   cors({
     origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
@@ -21,13 +18,13 @@ app.use(
   })
 );
 
-// routing
+// Routing.
 app.use("/", mainRouter);
 
-// serve the `backend/public` folder for public resources
+// Serve the `backend/public` folder for public resources.
 app.use(express.static(path.join(__dirname, "../public")));
 
-// serve REACT APP
+// Serve REACT APP.
 const reactIndexFile = path.join(
   __dirname,
   "..",
@@ -38,10 +35,10 @@ const reactIndexFile = path.join(
 );
 
 if (fs.existsSync(reactIndexFile)) {
-  // serve REACT resources
+  // Serve REACT resources.
   app.use(express.static(path.join(__dirname, "..", "..", "frontend", "dist")));
 
-  // redirect all requests to the REACT index file
+  // Redirect all requests to the REACT index file.
   app.get("*", (req, res) => {
     res.sendFile(reactIndexFile);
   });
