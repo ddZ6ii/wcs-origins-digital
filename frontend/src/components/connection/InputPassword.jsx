@@ -21,7 +21,7 @@ export default function InputPassword({
         className=" w-full rounded border-none bg-neutralLight p-3 outline-none dark:bg-neutralLightest"
         value={value}
         onChange={onInputChange}
-        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$£~()<>!%*?&,:\.])[A-Za-z\d@$£!%_~()<>*?&,:\.]{8,24}$"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$£~\(\)<>!%*?&,:\.])[A-Za-z\d@$£!%_~\(\)<>*?&,:\.]{8,24}$"
         required
         title="Must contain at least one number, one uppercase and lowercase letter, one special character and between 8 and 24 characters"
       />
