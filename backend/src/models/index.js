@@ -1,21 +1,18 @@
-require("dotenv").config();
-
 const mysql = require("mysql2/promise");
+const { DB_CONNECTION_CONFIG } = require("../database/config");
+const VideoManager = require("./VideoManager");
+const LanguageManager = require("./LanguageManager");
+const GameManager = require("./GameManager");
+const UserManager = require("./UserManager");
+const PlanManager = require("./PlanManager");
+const CategoryManager = require("./CategoryManager");
+const UserVideoManager = require("./UserVideoManager");
+const VideoCategoryManager = require("./VideoCategoryManager");
 
-// create a connection pool to the database
+// Create a connection pool to the database.
+const pool = mysql.createPool(DB_CONNECTION_CONFIG);
 
-const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
-
-const pool = mysql.createPool({
-  host: DB_HOST,
-  port: DB_PORT,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_NAME,
-});
-
-// try a connection
-
+// Try a connection.
 pool.getConnection().catch(() => {
   console.warn(
     "Warning:",
@@ -25,17 +22,8 @@ pool.getConnection().catch(() => {
   );
 });
 
-// declare and fill models: that's where you should register your own managers
+// Declare and fill models: that's where you should register your own managers.
 const models = {};
-
-const VideoManager = require("./VideoManager");
-const LanguageManager = require("./LanguageManager");
-const GameManager = require("./GameManager");
-const UserManager = require("./UserManager");
-const PlanManager = require("./PlanManager");
-const CategoryManager = require("./CategoryManager");
-const UserVideoManager = require("./UserVideoManager");
-const VideoCategoryManager = require("./VideoCategoryManager");
 
 models.user_video = new UserVideoManager();
 models.user_video.setDatabase(pool);
@@ -61,9 +49,7 @@ models.category.setDatabase(pool);
 models.videoCategory = new VideoCategoryManager();
 models.videoCategory.setDatabase(pool);
 
-// bonus: use a proxy to personalize error message,
-// when asking for a non existing model
-
+// Use a proxy to personalize error message, when asking for a non existing model.
 const handler = {
   get(obj, prop) {
     if (prop in obj) {
