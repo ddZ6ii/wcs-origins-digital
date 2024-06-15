@@ -167,9 +167,9 @@ VALUES
 -- Create users
 INSERT INTO `user` (`email`, `password`, `pseudo`, `plan_id`, `user_type_id`) 
 VALUES
-('user_freemium@gmail.com', '$argon2id$v=19$m=19893.36898592844,t=2,p=1$y/F65lSZ40xAVxes2YWvPw$4GTu0y5B2DnzDWVe93u/ai5vI5+9yU8yoB2tNKQC678', 'freemium', 1, 1),
-('user_premium@gmail.com', '$argon2id$v=19$m=19893.36898592844,t=2,p=1$yqlfBNhiugXAFJy6wVY17Q$l7x0JTBsOjLch9YzWSGPwRtlO7w+ZC/SybDqtOk+2VQ', 'premium', 3, 1),
-('admin@gmail.com', '$argon2id$v=19$m=19893.36898592844,t=2,p=1$RzN1/toefZqgTmUm3YSIDA$PevcNEmCjdb63rOjUtrhoCcdTQRwsHHCrZNNaT3yq48', 'admin', null, 2);
+('user_freemium@gmail.com', '$argon2id$v=19$m=19893.36898592844,t=2,p=1$z5uHZe5z5NTKD1hiU1FfNQ$5VXfQZlBcEPilkKtaLsM67ucRwduCWf/EMJEz+nYm2A', 'freemium', 1, 1),
+('user_premium@gmail.com', '$argon2id$v=19$m=19893.36898592844,t=2,p=1$R6ep3DFZWLBJvrpKjCqtng$HXU99E7as9hBpweokMuAuElFgUIHhRXpSckHskAblkE', 'premium', 3, 1),
+('admin@gmail.com', '$argon2id$v=19$m=19893.36898592844,t=2,p=1$/wvIB4a0vxCI0z8wc8cbhQ$kxA3k6F5LsD2EWPMJtLQQrR5+lQrW/bhmIwVCorBn30', 'admin', null, 2);
 
 -- Create video
 INSERT INTO `video` (`title`, `upload_date`, `description`, `slug`, `status`, `thumbnail`, `url_video`, `is_promoted`, `visibility`, `game_id`, `language_id`) 
