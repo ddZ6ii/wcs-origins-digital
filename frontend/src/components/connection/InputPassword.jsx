@@ -1,8 +1,5 @@
 import PropTypes from "prop-types";
 
-import passHide from "../../assets/icon/utility/eyeSlash.svg";
-import passShow from "../../assets/icon/dashboard/watch.svg";
-
 export default function InputPassword({
   type,
   name,
@@ -30,7 +27,14 @@ export default function InputPassword({
         className="absolute right-3 flex w-5"
         onClick={onButtonClick}
       >
-        <img src={isVisible ? passHide : passShow} alt="show password icon" />
+        <img
+          src={
+            isVisible
+              ? "/assets/icon/utility/eyeSlash.svg"
+              : "/assets/icon/dashboard/watch.svg"
+          }
+          alt="show password icon"
+        />
       </button>
     </div>
   );

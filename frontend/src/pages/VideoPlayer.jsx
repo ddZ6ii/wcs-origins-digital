@@ -14,11 +14,8 @@ import {
 
 import Button from "../components/common/Button";
 import Label from "../components/common/Label";
-import Like from "../assets/icon/utility/like.svg";
-import Liked from "../assets/icon/utility/like_red.svg";
 import Loader from "../components/common/Loader";
 import Player from "../components/player/Player";
-import Share from "../assets/icon/utility/share.svg";
 
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
@@ -113,12 +110,19 @@ export default function VideoPlayer() {
         <div className="flex items-center gap-4 md:gap-6">
           {account.id_user !== undefined && (
             <Button type="button" onClick={handleFavorite}>
-              <img src={isFav ? Liked : Like} alt="like_red button" />
+              <img
+                src={
+                  isFav
+                    ? "/assets/icon/utility/like_red.svg"
+                    : "/assets/icon/utility/like.svg"
+                }
+                alt="like_red button"
+              />
             </Button>
           )}
 
           <Button type="button" onClick={handleShare}>
-            <img src={Share} alt="share button" />
+            <img src="/assets/icon/utility/share.svg" alt="share button" />
           </Button>
 
           {isOpen && (

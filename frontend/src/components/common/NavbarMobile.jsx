@@ -10,7 +10,6 @@ import useAuth from "../../hooks/useAuth";
 import MenuOpen from "../navbar/MenuOpen";
 import MenuClose from "../navbar/MenuClose";
 import LogOut from "../navbar/LogOut";
-import Logo from "../../assets/icon/navbar/mobile/logo_mobile.svg";
 
 // services
 import * as User from "../../services/users";
@@ -41,7 +40,12 @@ export default function NavbarMobile({ navitems }) {
   return (
     <nav className={`${styles.navbar} ${styles.navbarMobile}`}>
       <NavLink to="/" className={styles.navbarMobile__logo}>
-        <img src={Logo} alt="logo origins-digital" width="48" height="48" />
+        <img
+          src="/assets/icon/navbar/mobile/logo_mobile.svg"
+          alt="logo origins-digital"
+          width="48"
+          height="48"
+        />
       </NavLink>
 
       <ul
