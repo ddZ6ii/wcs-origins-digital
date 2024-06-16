@@ -22,7 +22,7 @@ app.use(cors(CORS_OPTIONS));
 app.use("/", mainRouter);
 
 // Serve the `backend/public` folder for public resources.
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static("public"));
 
 // Serve REACT APP.
 const reactIndexFile = path.join(

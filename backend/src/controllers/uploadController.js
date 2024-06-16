@@ -1,7 +1,12 @@
 const fs = require("node:fs");
 const { v4: uuidv4 } = require("uuid");
 
-const FRONT_DEST = `${process.env.BACKEND_URL}:${process.env.APP_PORT}/`;
+let FRONT_DEST;
+if (process.env.NODE_ENV === "production") {
+  FRONT_DEST = `${process.env.BACKEND_URL}/`;
+} else {
+  FRONT_DEST = `${process.env.BACKEND_URL}:${process.env.PORT}/`;
+}
 
 const post = (req, res) => {
   // extract file destination (backend location)
