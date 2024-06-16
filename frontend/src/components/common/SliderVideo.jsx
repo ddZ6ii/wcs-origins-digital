@@ -77,7 +77,7 @@ export default function SliderVideo({
                     className={`${styles.overlay__wrapper} ${customClassOverlayWrapper}`}
                   >
                     <img
-                      src="./src/assets/icon/utility/lock.svg"
+                      src="/assets/icon/utility/lock.svg"
                       alt={video.title}
                       className={styles.overlay__wrapper__lock}
                     />

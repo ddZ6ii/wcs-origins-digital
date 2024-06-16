@@ -52,7 +52,7 @@ export default function GalleryItem({
             customCSS="flex flex-col items-center justify-center"
             onClick={showMore}
           >
-            <img src="./src/assets/icon/utility/showMore.svg" alt="show more" />
+            <img src="/assets/icon/utility/showMore.svg" alt="show more" />
             Load More
           </Button>
         )}

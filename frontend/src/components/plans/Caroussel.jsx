@@ -90,7 +90,7 @@ export default function Caroussel({ plans, billing }) {
                       .map((perk) => (
                         <li key={perk} className={styles.card__plan__perk}>
                           <img
-                            src="./src/assets/icon/utility/tick.svg"
+                            src="/assets/icon/utility/tick.svg"
                             alt={perk}
                             className={styles.card__plan__bullet}
                           />

@@ -2,13 +2,13 @@
   {
     "id": 1,
     "title": "Favorites",
-    "logo": "./src/assets/icon/dashboard/favorites.svg",
+    "logo": "/assets/icon/dashboard/favorites.svg",
     "alt": "favorites icon"
   },
   {
     "id": 2,
     "title": "Subscription",
-    "logo": "./src/assets/icon/dashboard/plan.svg",
+    "logo": "/assets/icon/dashboard/plan.svg",
     "alt": "plan icon"
   }
 ]

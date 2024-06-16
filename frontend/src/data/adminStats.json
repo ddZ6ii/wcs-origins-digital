@@ -3,28 +3,28 @@
     "id": 1,
     "title": "Videos",
     "total": null,
-    "logo": "./src/assets/icon/dashboard/video.svg",
+    "logo": "/assets/icon/dashboard/video.svg",
     "alt": "video icon"
   },
   {
     "id": 2,
     "title": "Users",
     "total": null,
-    "logo": "./src/assets/icon/dashboard/users.svg",
+    "logo": "/assets/icon/dashboard/users.svg",
     "alt": "users icon"
   },
   {
     "id": 3,
     "title": "Categories",
     "total": null,
-    "logo": "./src/assets/icon/dashboard/category.svg",
+    "logo": "/assets/icon/dashboard/category.svg",
     "alt": "categories icon"
   },
   {
     "id": 4,
     "title": "Games",
     "total": null,
-    "logo": "./src/assets/icon/dashboard/joystick.svg",
+    "logo": "/assets/icon/dashboard/joystick.svg",
     "alt": "games icon"
   }
 ]

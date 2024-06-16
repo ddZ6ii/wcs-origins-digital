@@ -23,7 +23,7 @@ export default function About() {
               Rewind & Netco Sport both specialising in digital services
               tailored for broadcasters and sports federations. They are backed
               up by EMG's unique know-how and world-renowned expertise to master
-              the entire value chain from image creation to distribution.‍
+              the entire value chain from image creation to distribution.
             </p>
             <p>
               Netco Sports, created in 2008 and integrated into the group "EMG"
@@ -44,14 +44,14 @@ export default function About() {
               className="min-w-[80px]"
               width="80"
               height="auto"
-              src="./src/assets/img/aboutus/origins_digital_dark.svg"
+              src="/assets/img/aboutus/origins_digital_dark.svg"
               alt="logo_origins_digital"
             />
             <img
               className="min-w-[200px]"
               width="200"
               height="auto"
-              src="./src/assets/img/aboutus/rewind.svg"
+              src="/assets/img/aboutus/rewind.svg"
               alt="logo_rewind_netco"
             />
           </div>

@@ -1,19 +1,19 @@
 [
   {
     "id": 1,
-    "img": "./src/assets/img/picturesForHome/cs.jpg",
+    "img": "/assets/img/picturesForHome/cs.jpg",
     "link": "/videos/18",
     "alt": "counter strike"
   },
   {
     "id": 2,
-    "img": "./src/assets/img/picturesForHome/ow.jpg",
+    "img": "/assets/img/picturesForHome/ow.jpg",
     "link": "/videos/1",
     "alt": "overwatch"
   },
   {
     "id": 3,
-    "img": "./src/assets/img/picturesForHome/valo.jpg",
+    "img": "/assets/img/picturesForHome/valo.jpg",
     "link": "/videos/4",
     "alt": "valorant"
   }
